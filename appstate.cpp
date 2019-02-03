@@ -1,0 +1,165 @@
+#include "appstate.h"
+
+AppState::AppState(QObject *parent) : QObject(parent) {
+  m_color = QColor();
+  m_color.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
+
+  m_image = QImage(64,64, QImage::Format_ARGB32_Premultiplied);
+  m_image.fill(Qt::transparent);
+  m_last_point = nullptr;
+
+  swapBuffer();
+}
+
+void AppState::setHue(qreal hue) {
+  // comparing doubles in c++ is weird
+  if (fabs(hue - m_hue) >= std::numeric_limits<double>::epsilon()) {
+    m_hue = hue;
+    emit hueChanged();
+  }
+}
+
+qreal AppState::hue() const {
+  return m_hue;
+}
+
+void AppState::setColor(QColor &color) {
+  if (color != m_color) {
+    m_color = color;
+    emit colorChanged();
+  }
+}
+
+QColor AppState::color() const {
+  return m_color;
+}
+
+// Return the opaque color
+QColor AppState::colorOpaque() const {
+  QColor newColor = QColor(m_color);
+  newColor.setAlphaF(1.);
+  return newColor;
+}
+
+void AppState::swapBuffer() {
+  m_image_source = QImage(m_image);
+  m_image_layer = QImage(m_image);
+  m_image_layer.fill(QColor(0, 0, 0, 0));
+  m_last_point = nullptr;
+
+// Useful for saving an image
+//  QImageWriter writer("/images/layer.png", "PNG");
+//  qInfo("%d", writer.write(m_image_layer));
+//  QString boop(writer.errorString());
+//  qInfo(boop.toLatin1());
+}
+
+void AppState::drawFromCoordinates(double x, double y, double width, double height) {
+  QPoint point(
+    qRound(qBound(0., x / width, 1.) * 64),
+    qRound(qBound(0., y / height, 1.) * 64)
+  );
+
+  QRadialGradient gradient(point.x(), point.y(), 2);
+  gradient.setColorAt(0, m_color);
+  gradient.setColorAt(.65, m_color);
+  QColor newColor(m_color);
+  newColor.setAlphaF(0.);
+  gradient.setColorAt(1, newColor);
+  QBrush brush(gradient);
+
+  //TODO: Add chromatic aberation to LEDGrid
+  //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
+
+  // Create a new layer and paint onto it
+  // This technique wouldn't likely work for large images :/
+  QImage new_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
+  new_layer.fill(Qt::transparent);
+  QPainter paint;
+  paint.begin(&new_layer);
+  paint.setBrush(brush);
+
+  if (m_last_point == nullptr) {
+    paint.fillRect(point.x()-10, point.y()-10, 20, 20, brush);
+  } else {
+    QPen p;
+    p.setBrush(brush);
+    p.setColor(m_color);
+    p.setWidth(3);
+    paint.setPen(p);
+    QLine line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
+    paint.drawLine(line);
+  }
+
+  delete m_last_point;
+  m_last_point = new QPoint(point.x(), point.y());
+  paint.end();
+
+  // Merge the new layer and do not allow it to go above alpha threhold (acts like photoshop)
+  m_image_layer = GraphicsUtils::mergeImages(m_image_layer, new_layer, m_color.alpha());
+
+  // Paint m_image_layer onto copied m_image_source
+  // and update m_image
+  QImage original(m_image_source);
+  paint.begin(&original);
+  paint.drawImage(m_image_layer.rect(), m_image_layer);
+  paint.end();
+  m_image = original;
+  emit imageChanged();
+}
+
+void AppState::setColorFromCoordinates(double x, double y, double width, double height) {
+  // Matches algorithm in glsl shader in HSBSpectrum
+  setSaturationF(qBound(0., x / width, 1.));
+  setLightnessF(qBound(0., 1 - (y / height), 1.));
+  QColor newColor = QColor();
+  newColor.setHsvF(hue(), m_saturation, m_lightness, m_opacity);
+  setColor(newColor);
+}
+
+void AppState::setHueFromCoordinates(double y, double height) {
+  // Matches algorithm in glsl shader in HueGradient
+  qreal hue = qBound(0., y / height, 1.);
+  QColor newColor = QColor();
+  newColor.setHsvF(hue, m_saturation, m_lightness, m_opacity);
+  setColor(newColor);
+  setHue(hue);
+}
+
+void AppState::setOpacityFromCoordinates(double y, double height) {
+  setOpacity(qBound(0., y / height, 1.));
+  QColor newColor = QColor();
+  newColor.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
+  setColor(newColor);
+}
+
+void AppState::setSaturationF(qreal saturation) {
+  m_saturation = saturation;
+}
+
+qreal AppState::saturationF() const {
+  return m_saturation;
+}
+
+void AppState::setLightnessF(qreal lightness) {
+  m_lightness = lightness;
+}
+
+qreal AppState::lightnessF() const {
+  return m_lightness;
+}
+
+void AppState::setOpacity(qreal opacity) {
+  if (fabs(opacity - m_opacity) >= std::numeric_limits<double>::epsilon()) {
+    m_opacity = opacity;
+    emit opacityChanged();
+  }
+}
+
+qreal AppState::opacity() const {
+  return m_opacity;
+}
+
+QImage AppState::image() const {
+  return m_image;
+}

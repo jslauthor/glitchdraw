@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>HSBSpectrum.qml</file>
+        <file>HueGradient.qml</file>
+        <file>AlphaGradient.qml</file>
+        <file>images/back.svg</file>
+        <file>LEDGrid.qml</file>
+        <file>shaders/led.frag</file>
+        <file>shaders/tiles.frag</file>
+        <file>ColorIndicator.qml</file>
+    </qresource>
+</RCC>

@@ -24,8 +24,10 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onPositionChanged: {         
-          AppState.setOpacityFromCoordinates(mouseY, height)
+        onPositionChanged: {
+            if (pressed) {
+                AppState.setOpacityFromCoordinates(mouseY, height)
+            }
         }
     }
     Rectangle {

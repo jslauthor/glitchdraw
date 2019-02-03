@@ -46,7 +46,9 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onPositionChanged: {
-                AppState.setHueFromCoordinates(mouseY, height)
+                if (pressed) {
+                    AppState.setHueFromCoordinates(mouseY, height)
+                }
             }
         }
     }

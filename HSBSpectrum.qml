@@ -50,7 +50,9 @@ Rectangle {
             anchors.fill: parent
             hoverEnabled: true
             onPositionChanged: {
-                AppState.setColorFromCoordinates(mouseX, mouseY, width, height)
+                if (pressed) {
+                    AppState.setColorFromCoordinates(mouseX, mouseY, width, height)
+                }
             }
         }
     }

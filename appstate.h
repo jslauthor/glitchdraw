@@ -14,6 +14,7 @@
 #include <QDebug>
 
 #include "graphics/graphicsutils.h"
+#include "renderthread.h"
 
 class AppState : public QObject
 {
@@ -27,7 +28,8 @@ class AppState : public QObject
   Q_PROPERTY(QImage image READ image NOTIFY imageChanged)
 
 public:
-  explicit AppState(QObject *parent = nullptr);
+  explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
+  ~AppState() override;
 
   Q_INVOKABLE void setColorFromCoordinates(double x, double y, double width, double height);
   Q_INVOKABLE void setHueFromCoordinates(double y, double height);
@@ -72,6 +74,7 @@ private:
   QImage m_image_layer;
   QImage m_image_source;
   QPoint *m_last_point;
+  RenderThread *m_renderThread;
 };
 
 #endif // APPSTATE_H

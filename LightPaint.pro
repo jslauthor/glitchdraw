@@ -16,7 +16,8 @@ SOURCES += \
     appstate.cpp \
     main.cpp \
     qimageproxy.cpp \
-    graphics/graphicsutils.cpp
+    graphics/graphicsutils.cpp \
+    renderthread.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,4 +38,12 @@ DISTFILES += \
 HEADERS += \
     appstate.h \
     qimageproxy.h \
-    graphics/graphicsutils.h
+    graphics/graphicsutils.h \
+    renderthread.h
+
+unix:!macx: LIBS += -L$$PWD/rpi-rgb-led-matrix/lib/ -lrgbmatrix
+
+INCLUDEPATH += $$PWD/rpi-rgb-led-matrix/include
+DEPENDPATH += $$PWD/rpi-rgb-led-matrix/include
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/rpi-rgb-led-matrix/lib/librgbmatrix.a

@@ -1,6 +1,6 @@
 #include "appstate.h"
 
-AppState::AppState(QObject *parent) : QObject(parent) {
+AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   m_color = QColor();
   m_color.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
 
@@ -8,7 +8,12 @@ AppState::AppState(QObject *parent) : QObject(parent) {
   m_image.fill(Qt::transparent);
   m_last_point = nullptr;
 
+  m_renderThread = thread;
   swapBuffer();
+}
+
+AppState::~AppState() {
+  delete m_renderThread;
 }
 
 void AppState::setHue(qreal hue) {
@@ -105,6 +110,8 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   paint.drawImage(m_image_layer.rect(), m_image_layer);
   paint.end();
   m_image = original;
+
+  m_renderThread->render(m_image);
   emit imageChanged();
 }
 

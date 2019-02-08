@@ -65,36 +65,37 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
     qRound(qBound(0., y / height, 1.) * 64)
   );
 
-  QRadialGradient gradient(point.x(), point.y(), 2);
+  QRadialGradient gradient(point.x(), point.y(), 10);
   gradient.setColorAt(0, m_color);
-  gradient.setColorAt(.65, m_color);
+//  gradient.setColorAt(.65, m_color);
   QColor newColor(m_color);
   newColor.setAlphaF(0.);
   gradient.setColorAt(1, newColor);
   QBrush brush(gradient);
 
+  //TODO: Create Brush enum. Only use drawLine for hard brushes.
   //TODO: Add chromatic aberation to LEDGrid
   //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
 
   // Create a new layer and paint onto it
-  // This technique wouldn't likely work for large images :/
+  // This technique is unlike to work for large images :/
   QImage new_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
   new_layer.fill(Qt::transparent);
   QPainter paint;
   paint.begin(&new_layer);
   paint.setBrush(brush);
 
-  if (m_last_point == nullptr) {
+//  if (m_last_point == nullptr) {
     paint.fillRect(point.x()-10, point.y()-10, 20, 20, brush);
-  } else {
-    QPen p;
-    p.setBrush(brush);
-    p.setColor(m_color);
-    p.setWidth(3);
-    paint.setPen(p);
-    QLine line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
-    paint.drawLine(line);
-  }
+//  } else {
+//    QPen p;
+//    p.setBrush(brush);
+//    p.setColor(m_color);
+//    p.setWidth(3);
+//    paint.setPen(p);
+//    QLine line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
+//    paint.drawLine(line);
+//  }
 
   delete m_last_point;
   m_last_point = new QPoint(point.x(), point.y());
@@ -109,9 +110,9 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   paint.begin(&original);
   paint.drawImage(m_image_layer.rect(), m_image_layer);
   paint.end();
+  m_renderThread->render(original);
   m_image = original;
 
-  m_renderThread->render(m_image);
   emit imageChanged();
 }
 

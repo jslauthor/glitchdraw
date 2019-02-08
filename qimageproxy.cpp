@@ -1,9 +1,6 @@
 #include "qimageproxy.h"
 
-QImageProxy::QImageProxy()
-{
-
-}
+QImageProxy::QImageProxy() = default;
 
 void QImageProxy::setImage(QImage &image) {
   m_image = image;

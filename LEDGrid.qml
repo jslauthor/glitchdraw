@@ -18,11 +18,14 @@ QImageProxy {
         hoverEnabled: true
         onPositionChanged: {
           if (pressed) {
+              // Begin drawing a intermediate image on top of the saved image
+              // much like Photoshop
             AppState.drawFromCoordinates(mouseX, mouseY, width, height)
           }
         }
         onPressedChanged: {
             if (!pressed) {
+                // This paints the intermediate image onto the saved image (makes it permanent)
                 AppState.swapBuffer();
             }
         }

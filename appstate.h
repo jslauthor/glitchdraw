@@ -16,6 +16,33 @@
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
 
+// Data for the brush
+enum Brush {circle, square};
+class BrushAnatomy: public QObject {
+  Q_GADGET
+  Q_PROPERTY(Brush type MEMBER type);
+  Q_PROPERTY(qreal hardness MEMBER hardness);
+  Q_PROPERTY(int size MEMBER size);
+public:
+  BrushAnatomy() = default;
+  BrushAnatomy(const BrushAnatomy &copy) {
+    type = copy.type;
+    hardness = copy.hardness;
+    size = copy.size;
+  }
+  BrushAnatomy& operator= (const BrushAnatomy &copy) {
+    type = copy.type;
+    hardness = copy.hardness;
+    size = copy.size;
+    return *this;
+  }
+  ~BrushAnatomy() override = default;
+  Brush type = Brush::circle;
+  qreal hardness = .5;
+  int size = 10;
+};
+Q_DECLARE_METATYPE(BrushAnatomy);
+
 class AppState : public QObject
 {
   Q_OBJECT
@@ -26,6 +53,7 @@ class AppState : public QObject
   Q_PROPERTY(qreal lightnessF READ lightnessF WRITE setLightnessF NOTIFY colorChanged)
   Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
   Q_PROPERTY(QImage image READ image NOTIFY imageChanged)
+  Q_PROPERTY(BrushAnatomy brush READ brush WRITE setBrush NOTIFY brushChanged)
 
 public:
   explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
@@ -57,11 +85,15 @@ public:
 
   QImage image() const;
 
+  void setBrush(BrushAnatomy brush);
+  BrushAnatomy brush() const;
+
 signals:
   void hueChanged();
   void colorChanged();
   void opacityChanged();
   void imageChanged();
+  void brushChanged();
 
 public slots:
 private:
@@ -73,6 +105,8 @@ private:
   QImage m_image;
   QImage m_image_layer;
   QImage m_image_source;
+  BrushAnatomy m_brush;
+  // Pointers
   QPoint *m_last_point;
   RenderThread *m_renderThread;
 };

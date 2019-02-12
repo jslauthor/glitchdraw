@@ -12,6 +12,12 @@ Window {
     title: qsTr("Retro LEDoodler")
     color: "#2a2d29"
 
+    Image {
+        anchors.fill: parent
+        source: "images/app_bg.jpg"
+        antialiasing: true
+    }
+
     StackView {
         id: stackView
         initialItem: drawingInterface
@@ -32,12 +38,20 @@ Window {
                             onClicked: stackView.push(colorSelector)
                         }
                     }
+                    Slider {
+                        Layout.fillWidth: true
+                        value: 10
+                        from: 1
+                        to: 20
+                        onValueChanged: console.log(AppState.brush.size)
+                    }
                 }
 
                 LEDGrid {
                     id: ledGrid
                     Layout.fillHeight: true
                     Layout.minimumWidth: ledGrid.height
+                    Layout.alignment: Qt.AlignRight
                 }
             }
 

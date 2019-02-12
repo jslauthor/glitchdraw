@@ -9,5 +9,6 @@
         <file>shaders/led.frag</file>
         <file>shaders/tiles.frag</file>
         <file>ColorIndicator.qml</file>
+        <file>images/app_bg.jpg</file>
     </qresource>
 </RCC>

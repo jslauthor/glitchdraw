@@ -17,8 +17,7 @@ SOURCES += \
     main.cpp \
     qimageproxy.cpp \
     graphics/graphicsutils.cpp \
-    renderthread.cpp \
-    qbrushprovider.cpp
+    renderthread.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,14 +33,14 @@ INSTALLS += target
 
 DISTFILES += \
     images/back.svg \
-    shaders/tiles.frag
+    shaders/tiles.frag \
+    images/app_bg.jpg
 
 HEADERS += \
     appstate.h \
     qimageproxy.h \
     graphics/graphicsutils.h \
-    renderthread.h \
-    qbrushprovider.h
+    renderthread.h
 
 unix:!macx: LIBS += -L$$PWD/rpi-rgb-led-matrix/lib/ -lrgbmatrix
 

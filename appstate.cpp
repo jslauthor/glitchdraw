@@ -65,8 +65,9 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
     qRound(qBound(0., y / height, 1.) * 64)
   );
 
-  QRadialGradient gradient(point.x(), point.y(), 10);
+  QRadialGradient gradient(point.x(), point.y(), m_brush.size);
   gradient.setColorAt(0, m_color);
+//  gradient.setRadius(.5);
 //  gradient.setColorAt(.65, m_color);
   QColor newColor(m_color);
   newColor.setAlphaF(0.);
@@ -170,4 +171,13 @@ qreal AppState::opacity() const {
 
 QImage AppState::image() const {
   return m_image;
+}
+
+void AppState::setBrush(BrushAnatomy brush) {
+  m_brush = brush;
+  emit brushChanged();
+}
+
+BrushAnatomy AppState::brush() const {
+  return m_brush;
 }

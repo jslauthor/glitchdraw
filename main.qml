@@ -38,12 +38,12 @@ Window {
                             onClicked: stackView.push(colorSelector)
                         }
                     }
-                    Slider {
+                    ConfigSlider {
                         Layout.fillWidth: true
                         value: 10
                         from: 1
                         to: 20
-                        onValueChanged: console.log(AppState.brush.size)
+                        onChanged:  console.log(value)
                     }
                 }
 

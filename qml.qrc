@@ -10,5 +10,6 @@
         <file>shaders/tiles.frag</file>
         <file>ColorIndicator.qml</file>
         <file>images/app_bg.jpg</file>
+        <file>ConfigSlider.qml</file>
     </qresource>
 </RCC>

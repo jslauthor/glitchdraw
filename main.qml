@@ -30,6 +30,7 @@ Window {
                 Layout.fillHeight: true
                 ColumnLayout {
                     Layout.fillHeight: true
+                    spacing: 30
                     ColorIndicator {
                         width: 75
                         height: 75
@@ -39,7 +40,8 @@ Window {
                         }
                     }
                     ConfigSlider {
-                        id: brushConfig
+                        id: brushSizeConfig
+                        Layout.margins: 10
                         Layout.fillWidth: true
                         value: AppState.brush.size
                         from: 1
@@ -48,8 +50,22 @@ Window {
                         label: AppState.brush.size + " pts"
                         onChanged: AppState.setBrushSize(value)
 
-                        Binding { target: brushConfig; property: "value"; value: AppState.brush.size }
-                        Binding { target: AppState; property: "brush.size"; value: brushConfig.value }
+                        Binding { target: brushSizeConfig; property: "value"; value: AppState.brush.size }
+                        Binding { target: AppState; property: "brush.size"; value: brushSizeConfig.value }
+                    }
+                    ConfigSlider {
+                        id: brushHardnessConfig
+                        Layout.margins: 10
+                        Layout.fillWidth: true
+                        value: AppState.brush.hardness
+                        from: 1
+                        to: 100
+                        header: "hardness"
+                        label: AppState.brush.hardness + "%"
+                        onChanged: AppState.setBrushHardness(value)
+
+                        Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
+                        Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
                     }
                 }
 

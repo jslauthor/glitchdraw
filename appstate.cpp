@@ -186,3 +186,8 @@ void AppState::setBrushSize(int size) {
   m_brush.size = size;
   emit brushChanged();
 }
+
+void AppState::setBrushHardness(qreal hardness) {
+  m_brush.hardness = hardness;
+  emit brushChanged();
+}

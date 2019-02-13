@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
   // See: http://doc.qt.io/qt-5/qtqml-cppintegration-contextproperties.html
   engine.rootContext()->setContextProperty("AppState", &appState);
   // Load up the QML
+  engine.addImportPath(":/imports");
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
 
   if (engine.rootObjects().isEmpty())
     return -1;

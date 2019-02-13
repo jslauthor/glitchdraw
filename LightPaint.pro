@@ -1,4 +1,4 @@
-QT += quick
+QT += quick quickcontrols2
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -19,10 +19,12 @@ SOURCES += \
     graphics/graphicsutils.cpp \
     renderthread.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    imports/Theme/Theme.qml \
+    imports/Theme/qmldir
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = $$PWD/imports
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
@@ -34,7 +36,8 @@ INSTALLS += target
 DISTFILES += \
     images/back.svg \
     shaders/tiles.frag \
-    images/app_bg.jpg
+    images/app_bg.jpg \
+    imports/Theme/qmldir
 
 HEADERS += \
     appstate.h \

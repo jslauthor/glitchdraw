@@ -7,4 +7,8 @@ QtObject {
     readonly property color mutedBlue: "#38717A"
     readonly property color darkBlue: "#22215C"
     readonly property color superBlue: "#00FFE6"
+
+    property FontLoader mainFont: FontLoader {
+        source: "qrc:/content/fonts/8-bit-pusab.ttf"
+    }
 }

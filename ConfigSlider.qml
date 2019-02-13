@@ -11,6 +11,13 @@ Item {
     signal changed(int value)
     RowLayout {
         anchors.fill: parent
+
+        Text {
+            id: hello
+            text: qsTr("text")
+            font.family: Theme.mainFont.name
+        }
+
         Slider {
             id: valueSlider
             Layout.fillWidth: true

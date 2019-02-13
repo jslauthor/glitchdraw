@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
   engine.rootContext()->setContextProperty("AppState", &appState);
   // Load up the QML
   engine.addImportPath(":/imports");
+  engine.addImportPath(":/content");
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
   if (engine.rootObjects().isEmpty())

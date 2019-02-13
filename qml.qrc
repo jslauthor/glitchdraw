@@ -13,5 +13,6 @@
         <file>ConfigSlider.qml</file>
         <file>imports/Theme/Theme.qml</file>
         <file>imports/Theme/qmldir</file>
+        <file>content/fonts/8-bit-pusab.ttf</file>
     </qresource>
 </RCC>

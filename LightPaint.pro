@@ -37,7 +37,8 @@ DISTFILES += \
     images/back.svg \
     shaders/tiles.frag \
     images/app_bg.jpg \
-    imports/Theme/qmldir
+    imports/Theme/qmldir \
+    content/fonts/8-bit-pusab.ttf
 
 HEADERS += \
     appstate.h \

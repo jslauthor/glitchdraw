@@ -173,11 +173,16 @@ QImage AppState::image() const {
   return m_image;
 }
 
-void AppState::setBrush(BrushAnatomy brush) {
+void AppState::setBrush(const BrushAnatomy& brush) {
   m_brush = brush;
   emit brushChanged();
 }
 
 BrushAnatomy AppState::brush() const {
   return m_brush;
+}
+
+void AppState::setBrushSize(int size) {
+  m_brush.size = size;
+  emit brushChanged();
 }

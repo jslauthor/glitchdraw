@@ -8,23 +8,36 @@ Item {
     property int value
     property int from
     property int to
+    property string header
+    property string label
     signal changed(int value)
     RowLayout {
         anchors.fill: parent
 
-        Text {
-            id: hello
-            text: qsTr("text")
-            font.family: Theme.mainFont.name
+        ColumnLayout {
+            Text {
+                text: root.header
+                font.family: Theme.mainFont.name
+                font.pixelSize: Theme.h6
+                color: Theme.peach
+            }
+            Text {
+                text: root.label
+                font.family: Theme.mainFont.name
+                font.pixelSize: Theme.h2
+                color: Theme.superBlue
+            }
         }
 
         Slider {
             id: valueSlider
             Layout.fillWidth: true
+            Layout.maximumWidth: 200
+            Layout.alignment: Qt.AlignRight
             value: root.value
             from: root.from
             to: root.to
-            onValueChanged: root.changed(valueSlider.value)
+            onValueChanged: root.value = value
             background: Item {
                 x: valueSlider.leftPadding
                 y: valueSlider.topPadding + valueSlider.availableHeight / 2 - height / 2

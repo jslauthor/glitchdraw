@@ -39,11 +39,17 @@ Window {
                         }
                     }
                     ConfigSlider {
+                        id: brushConfig
                         Layout.fillWidth: true
-                        value: 10
+                        value: AppState.brush.size
                         from: 1
                         to: 20
-                        onChanged:  console.log(value)
+                        header: "size"
+                        label: AppState.brush.size + " pts"
+                        onChanged: AppState.setBrushSize(value)
+
+                        Binding { target: brushConfig; property: "value"; value: AppState.brush.size }
+                        Binding { target: AppState; property: "brush.size"; value: brushConfig.value }
                     }
                 }
 

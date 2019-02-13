@@ -63,6 +63,7 @@ public:
   Q_INVOKABLE void setHueFromCoordinates(double y, double height);
   Q_INVOKABLE void setOpacityFromCoordinates(double y, double height);
   Q_INVOKABLE void drawFromCoordinates(double x, double y, double width, double height);
+  Q_INVOKABLE void setBrushSize(int size);
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();
@@ -85,7 +86,7 @@ public:
 
   QImage image() const;
 
-  void setBrush(BrushAnatomy brush);
+  void setBrush(const BrushAnatomy& brush);
   BrushAnatomy brush() const;
 
 signals:

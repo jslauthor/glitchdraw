@@ -14,5 +14,7 @@
         <file>imports/Theme/Theme.qml</file>
         <file>imports/Theme/qmldir</file>
         <file>content/fonts/8-bit-pusab.ttf</file>
+        <file>GlitchButton.qml</file>
+        <file>images/skull.svg</file>
     </qresource>
 </RCC>

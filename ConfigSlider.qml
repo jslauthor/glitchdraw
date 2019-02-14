@@ -5,16 +5,19 @@ import Theme 1.0
 
 Item {
     id: root
-    property int value
+    height: labels.height
+    property real value
     property int from
     property int to
     property string header
     property string label
+    property real stepSize: .05
     signal changed(int value)
     RowLayout {
         anchors.fill: parent
 
         ColumnLayout {
+            id: labels
             Text {
                 text: root.header
                 font.family: Theme.mainFont.name
@@ -37,6 +40,7 @@ Item {
             value: root.value
             from: root.from
             to: root.to
+            stepSize: root.stepSize
             onValueChanged: root.value = value
             background: Item {
                 x: valueSlider.leftPadding

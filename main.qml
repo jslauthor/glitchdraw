@@ -4,13 +4,13 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtGraphicalEffects 1.0
 import LeonardSouza 1.0
+import Theme 1.0
 
 Window {
     visible: true
     width: 800
     height: 480
     title: qsTr("Retro LEDoodler")
-    color: "#2a2d29"
 
     Image {
         anchors.fill: parent
@@ -30,7 +30,6 @@ Window {
                 Layout.fillHeight: true
                 ColumnLayout {
                     Layout.fillHeight: true
-                    spacing: 30
                     ColorIndicator {
                         width: 75
                         height: 75
@@ -46,6 +45,7 @@ Window {
                         value: AppState.brush.size
                         from: 1
                         to: 20
+                        stepSize: 1
                         header: "size"
                         label: AppState.brush.size + " pts"
                         onChanged: AppState.setBrushSize(value)
@@ -58,14 +58,20 @@ Window {
                         Layout.margins: 10
                         Layout.fillWidth: true
                         value: AppState.brush.hardness
-                        from: 1
-                        to: 100
+                        from: 0
+                        to: 1
                         header: "hardness"
-                        label: AppState.brush.hardness + "%"
+                        label: Math.round(AppState.brush.hardness * 100) + "%"
                         onChanged: AppState.setBrushHardness(value)
 
                         Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
                         Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
+                    }
+                    GlitchButton {
+                        backgroundColor: Theme.alertRed
+                        onClicked: AppState.clearCanvas()
+                        label: "CLEAR ALL"
+                        Layout.alignment: Qt.AlignCenter
                     }
                 }
 

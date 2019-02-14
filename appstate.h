@@ -65,6 +65,7 @@ public:
   Q_INVOKABLE void drawFromCoordinates(double x, double y, double width, double height);
   Q_INVOKABLE void setBrushSize(int size);
   Q_INVOKABLE void setBrushHardness(qreal hardness);
+  Q_INVOKABLE void clearCanvas();
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();

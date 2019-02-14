@@ -87,7 +87,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   paint.setBrush(brush);
 
 //  if (m_last_point == nullptr) {
-    paint.fillRect(point.x()-10, point.y()-10, 20, 20, brush);
+    paint.fillRect(point.x()-32, point.y()-32, 64, 64, brush);
 //  } else {
 //    QPen p;
 //    p.setBrush(brush);
@@ -111,10 +111,11 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   paint.begin(&original);
   paint.drawImage(m_image_layer.rect(), m_image_layer);
   paint.end();
-  m_renderThread->render(original);
   m_image = original;
 
   emit imageChanged();
+
+  m_renderThread->render(original);
 }
 
 void AppState::setColorFromCoordinates(double x, double y, double width, double height) {
@@ -190,4 +191,10 @@ void AppState::setBrushSize(int size) {
 void AppState::setBrushHardness(qreal hardness) {
   m_brush.hardness = hardness;
   emit brushChanged();
+}
+
+void AppState::clearCanvas() {
+  m_image.fill(Qt::transparent);
+  swapBuffer();
+  emit imageChanged();
 }

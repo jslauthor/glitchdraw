@@ -197,4 +197,5 @@ void AppState::clearCanvas() {
   m_image.fill(Qt::transparent);
   swapBuffer();
   emit imageChanged();
+  m_renderThread->render(m_image);
 }

@@ -4,12 +4,14 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   m_color = QColor();
   m_color.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
 
-  m_image = QImage(64,64, QImage::Format_ARGB32_Premultiplied);
+  m_image = QImage(LED_SIZE, LED_SIZE, QImage::Format_ARGB32_Premultiplied);
   m_image.fill(Qt::transparent);
   m_last_point = nullptr;
 
   m_renderThread = thread;
   swapBuffer();
+
+  m_renderThread->render(m_image);
 }
 
 AppState::~AppState() {
@@ -61,14 +63,13 @@ void AppState::swapBuffer() {
 
 void AppState::drawFromCoordinates(double x, double y, double width, double height) {
   QPoint point(
-    qRound(qBound(0., x / width, 1.) * 64),
-    qRound(qBound(0., y / height, 1.) * 64)
+    qRound(qBound(0., x / width, 1.) * LED_SIZE),
+    qRound(qBound(0., y / height, 1.) * LED_SIZE)
   );
 
   QRadialGradient gradient(point.x(), point.y(), m_brush.size);
   gradient.setColorAt(0, m_color);
-//  gradient.setRadius(.5);
-//  gradient.setColorAt(.65, m_color);
+  gradient.setColorAt(m_brush.hardness, m_color);
   QColor newColor(m_color);
   newColor.setAlphaF(0.);
   gradient.setColorAt(1, newColor);
@@ -87,7 +88,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   paint.setBrush(brush);
 
 //  if (m_last_point == nullptr) {
-    paint.fillRect(point.x()-32, point.y()-32, 64, 64, brush);
+    paint.drawEllipse(point.x()-m_brush.size/2, point.y()-m_brush.size/2, m_brush.size, m_brush.size);
 //  } else {
 //    QPen p;
 //    p.setBrush(brush);
@@ -115,7 +116,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
 
   emit imageChanged();
 
-  m_renderThread->render(original);
+  m_renderThread->render(m_image);
 }
 
 void AppState::setColorFromCoordinates(double x, double y, double width, double height) {

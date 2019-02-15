@@ -1,7 +1,5 @@
 #include <utility>
 
-#include <utility>
-
 #include "renderthread.h"
 
 RenderThread::RenderThread(QObject *parent) : QThread(parent)
@@ -11,9 +9,11 @@ RenderThread::RenderThread(QObject *parent) : QThread(parent)
   defaults.hardware_mapping = "regular";  // or e.g. "adafruit-hat"
   defaults.chain_length = 2;
   defaults.parallel = 2;
+  defaults.brightness = 65;
   //    defaults.show_refresh_rate = true;
   rgb_matrix::RuntimeOptions runtime;
   runtime.drop_privileges = -1; // Need this otherwise the touchscreen doesn't work
+  runtime.gpio_slowdown = 2;
   m_canvas = rgb_matrix::CreateMatrixFromOptions(defaults, runtime);
   if (m_canvas == nullptr) {
     qInfo("could not create matrix");
@@ -45,9 +45,9 @@ void RenderThread::run()
   forever {
 //    m_mutex.lock();
     QImage image = m_image;
-    for (int y = 0; y < image.height(); y++) {
+    for (int y = 0; y < LED_SIZE; y++) {
       const QRgb *s = reinterpret_cast<const QRgb*>(image.constScanLine(y));
-      const QRgb *end = s + image.width();
+      const QRgb *end = s + LED_SIZE;
       int x = 0;
       while (s < end) {
         m_canvas->SetPixel(x, y, qRed(*s), qGreen(*s), qBlue(*s));

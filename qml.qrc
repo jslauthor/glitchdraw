@@ -16,5 +16,6 @@
         <file>content/fonts/8-bit-pusab.ttf</file>
         <file>GlitchButton.qml</file>
         <file>images/skull.svg</file>
+        <file>SectionLabel.qml</file>
     </qresource>
 </RCC>

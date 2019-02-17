@@ -16,20 +16,10 @@ Item {
     RowLayout {
         anchors.fill: parent
 
-        ColumnLayout {
+        SectionLabel {
             id: labels
-            Text {
-                text: root.header
-                font.family: Theme.mainFont.name
-                font.pixelSize: Theme.h6
-                color: Theme.peach
-            }
-            Text {
-                text: root.label
-                font.family: Theme.mainFont.name
-                font.pixelSize: Theme.h2
-                color: Theme.superBlue
-            }
+            header: root.header
+            label: root.label
         }
 
         Slider {

@@ -30,14 +30,6 @@ Window {
                 Layout.fillHeight: true
                 ColumnLayout {
                     Layout.fillHeight: true
-                    ColorIndicator {
-                        width: 75
-                        height: 75
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: stackView.push(colorSelector)
-                        }
-                    }
                     ConfigSlider {
                         id: brushSizeConfig
                         Layout.margins: 10
@@ -66,6 +58,13 @@ Window {
 
                         Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
                         Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
+                    }
+                    ColorIndicator {
+                        Layout.margins: 10
+                         MouseArea {
+                            anchors.fill: parent
+                            onClicked: stackView.push(colorSelector)
+                        }
                     }
                     GlitchButton {
                         backgroundColor: Theme.alertRed

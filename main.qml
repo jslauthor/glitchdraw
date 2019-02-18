@@ -61,8 +61,9 @@ Window {
                     }
                     ColorIndicator {
                         Layout.margins: 10
-                         MouseArea {
-                            anchors.fill: parent
+                        MouseArea {
+                            width:  parent.width
+                            height: parent.height
                             onClicked: stackView.push(colorSelector)
                         }
                     }

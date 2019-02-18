@@ -30,13 +30,17 @@ Window {
                 Layout.fillHeight: true
                 ColumnLayout {
                     Layout.fillHeight: true
+                    BrushSelector {
+                        Layout.margins: 10
+                        currentIndex: AppState.brush.type === BrushAnatomy.circle ? 0 : 1
+                    }
                     ConfigSlider {
                         id: brushSizeConfig
                         Layout.margins: 10
                         Layout.fillWidth: true
                         value: AppState.brush.size
                         from: 1
-                        to: 20
+                        to: 64
                         stepSize: 1
                         header: "size"
                         label: AppState.brush.size + " pts"

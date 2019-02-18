@@ -17,5 +17,7 @@
         <file>GlitchButton.qml</file>
         <file>images/skull.svg</file>
         <file>SectionLabel.qml</file>
+        <file>BrushSelector.qml</file>
+        <file>BrushModel.qml</file>
     </qresource>
 </RCC>

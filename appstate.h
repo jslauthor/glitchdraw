@@ -17,7 +17,6 @@
 #include "renderthread.h"
 
 // Data for the brush
-enum Brush {circle, square};
 class BrushAnatomy: public QObject {
   Q_GADGET
   Q_PROPERTY(Brush type MEMBER type);
@@ -37,6 +36,8 @@ public:
     return *this;
   }
   ~BrushAnatomy() override = default;
+  enum Brush {circle, square};
+  Q_ENUM(Brush);
   Brush type = Brush::circle;
   qreal hardness = .5;
   int size = 10;

@@ -2,9 +2,9 @@ import QtQuick 2.0
 
 ListModel {
     ListElement {
-        type: 'circle'
+        type: 0
     }
     ListElement {
-        type: 'square'
+        type: 1
     }
 }

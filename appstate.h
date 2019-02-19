@@ -16,10 +16,19 @@
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
 
+namespace Brush {
+  Q_NAMESPACE
+  enum Brushes {
+    circle=0,
+    square=1
+  };
+  Q_ENUMS(Brushes)
+}
+
 // Data for the brush
 class BrushAnatomy: public QObject {
   Q_GADGET
-  Q_PROPERTY(Brush type MEMBER type);
+  Q_PROPERTY(Brush::Brushes type MEMBER type);
   Q_PROPERTY(qreal hardness MEMBER hardness);
   Q_PROPERTY(int size MEMBER size);
 public:
@@ -36,9 +45,7 @@ public:
     return *this;
   }
   ~BrushAnatomy() override = default;
-  enum Brush {circle, square};
-  Q_ENUM(Brush);
-  Brush type = Brush::circle;
+  Brush::Brushes type = Brush::Brushes::circle;
   qreal hardness = .5;
   int size = 10;
 };
@@ -64,6 +71,7 @@ public:
   Q_INVOKABLE void setHueFromCoordinates(double y, double height);
   Q_INVOKABLE void setOpacityFromCoordinates(double y, double height);
   Q_INVOKABLE void drawFromCoordinates(double x, double y, double width, double height);
+  Q_INVOKABLE void setBrushType(int type);
   Q_INVOKABLE void setBrushSize(int size);
   Q_INVOKABLE void setBrushHardness(qreal hardness);
   Q_INVOKABLE void clearCanvas();

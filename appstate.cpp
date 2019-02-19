@@ -194,6 +194,22 @@ void AppState::setBrushHardness(qreal hardness) {
   emit brushChanged();
 }
 
+void AppState::setBrushType(int type) {
+  // totally lame that we can't use the native enum from QML
+  switch(type) {
+    case 0:
+      m_brush.type = Brush::circle;
+      break;
+    case 1:
+      m_brush.type = Brush::square;
+      break;
+    default:
+      break;
+  }
+
+  emit brushChanged();
+}
+
 void AppState::clearCanvas() {
   m_image.fill(Qt::transparent);
   swapBuffer();

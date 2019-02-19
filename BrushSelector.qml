@@ -1,14 +1,17 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.12
 import Theme 1.0
+import LeonardSouza 1.0
 
 ListView {
     id: list
     model: BrushModel {}
+    currentIndex: AppState.brush.type
     orientation: ListView.Horizontal
     implicitHeight: 85
     implicitWidth: childrenRect.width
     spacing: 20
+    signal itemClicked(int brush)
     delegate: Item {
         id: brushDelegate
         width: 85
@@ -22,7 +25,7 @@ ListView {
         RadialGradient {
             width: AppState.brush.size
             height: AppState.brush.size
-            visible: type === 'circle'
+            visible: type === 0
             anchors.centerIn: parent
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#FFFFFF" }
@@ -33,9 +36,14 @@ ListView {
         Rectangle {
             width: AppState.brush.size
             height: AppState.brush.size
-            visible: type === 'square'
+            visible: type === 1
             anchors.centerIn: parent
             color: "#FFFFFF"
+        }
+        MouseArea {
+            width: brushDelegate.height
+            height: brushDelegate.height
+            onClicked: itemClicked(type)
         }
     }
 }

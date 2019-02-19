@@ -32,7 +32,7 @@ Window {
                     Layout.fillHeight: true
                     BrushSelector {
                         Layout.margins: 10
-                        currentIndex: AppState.brush.type === BrushAnatomy.circle ? 0 : 1
+                        onItemClicked: AppState.setBrushType(brush);
                     }
                     ConfigSlider {
                         id: brushSizeConfig

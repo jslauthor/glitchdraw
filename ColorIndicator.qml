@@ -4,6 +4,7 @@ import Theme 1.0
 
 ColumnLayout {
     id: root
+    spacing: 5
     Text {
         id: header
         text: "color"
@@ -12,6 +13,7 @@ ColumnLayout {
         color: Theme.peach
     }
     Item {
+        id: indicator
         width: 75
         height: 75
         Item {
@@ -37,6 +39,13 @@ ColumnLayout {
             ]
         }
         clip: true
+        layer.enabled: true
+        layer.effect:
+            ShaderEffect {
+                property size size: Qt.size(indicator.width, indicator.height)
+                property real clipSize: Theme.clipSize
+                fragmentShader: "qrc:/shaders/clipcorners.frag"
+            }
     }
     RowLayout {
         spacing: 20

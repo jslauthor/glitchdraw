@@ -9,31 +9,17 @@ Button {
     property color backgroundColor: "#888"
     property string label: "A button"
     style: ButtonStyle {
-        background: Item {
-            Rectangle {
-                width: 6
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 6
-                anchors.topMargin: 6
-                color: backgroundColor
-
-            }
-            Rectangle {
-                anchors.fill: parent
-                anchors.leftMargin: 6
-                anchors.rightMargin: 6
-                color: backgroundColor
-            }
-            Rectangle {
-                width: 6
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 6
-                anchors.topMargin: 6
-                color: backgroundColor
-                anchors.right: parent.right
-            }
+        background: Rectangle {
+            id: bg
+            anchors.fill: parent
+            color: backgroundColor
+            layer.enabled: true
+            layer.effect:
+                ShaderEffect {
+                    property size size: Qt.size(bg.width, bg.height)
+                    property real clipSize: Theme.clipSize
+                    fragmentShader: "qrc:/shaders/clipcorners.frag"
+                }
         }
         label: RowLayout {
 

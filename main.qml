@@ -30,9 +30,17 @@ Window {
                 Layout.fillHeight: true
                 ColumnLayout {
                     Layout.fillHeight: true
-                    BrushSelector {
+                    Layout.alignment: Qt.AlignBottom
+                    spacing: -10
+                    ColumnLayout {
                         Layout.margins: 10
-                        onItemClicked: AppState.setBrushType(brush);
+                        spacing: 5
+                        Header {
+                            text: "brushes"
+                        }
+                        BrushSelector {
+                            onItemClicked: AppState.setBrushType(brush);
+                        }
                     }
                     ConfigSlider {
                         id: brushSizeConfig
@@ -72,10 +80,11 @@ Window {
                         }
                     }
                     GlitchButton {
+                        Layout.topMargin: 5
+                        Layout.alignment: Qt.AlignCenter
                         backgroundColor: Theme.alertRed
                         onClicked: AppState.clearCanvas()
                         label: "CLEAR ALL"
-                        Layout.alignment: Qt.AlignCenter
                     }
                 }
 

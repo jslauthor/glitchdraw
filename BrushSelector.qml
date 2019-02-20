@@ -8,20 +8,14 @@ ListView {
     model: BrushModel {}
     currentIndex: AppState.brush.type
     orientation: ListView.Horizontal
-    implicitHeight: 85
+    implicitHeight: 75
     implicitWidth: childrenRect.width
     spacing: 20
     signal itemClicked(int brush)
     delegate: Item {
         id: brushDelegate
-        width: 85
-        height: 85
-        Rectangle {
-            visible: brushDelegate.ListView.isCurrentItem
-            width: list.height
-            height: list.height
-            color: Theme.blue
-        }
+        width: list.height
+        height: list.height
         RadialGradient {
             width: AppState.brush.size
             height: AppState.brush.size
@@ -42,8 +36,26 @@ ListView {
         }
         MouseArea {
             width: brushDelegate.height
-            height: brushDelegate.height
+            height: brushDelegate.width
             onClicked: itemClicked(type)
         }
+    }
+    highlight: Rectangle {
+        width: list.height
+        height: list.height
+        color: Theme.midBlue
+        Behavior on x {
+            SpringAnimation {
+                spring: 3
+                damping: 0.2
+            }
+        }
+        layer.enabled: true
+        layer.effect:
+            ShaderEffect {
+                property size size: Qt.size(list.height, list.height)
+                property real clipSize: Theme.clipSize
+                fragmentShader: "qrc:/shaders/clipcorners.frag"
+            }
     }
 }

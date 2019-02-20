@@ -19,5 +19,7 @@
         <file>SectionLabel.qml</file>
         <file>BrushSelector.qml</file>
         <file>BrushModel.qml</file>
+        <file>Header.qml</file>
+        <file>shaders/clipcorners.frag</file>
     </qresource>
 </RCC>

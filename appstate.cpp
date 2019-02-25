@@ -61,19 +61,40 @@ void AppState::swapBuffer() {
 //  qInfo(boop.toLatin1());
 }
 
+void AppState::updateBrush() {
+  QImage qpix(m_brush.size, m_brush.size, QImage::Format_ARGB32_Premultiplied);
+  qpix.fill(Qt::transparent);
+  QPainter paint;
+  paint.begin(&qpix);
+  switch (m_brush.type) {
+    case Brush::circle: {
+      QRadialGradient gradient(m_brush.size/2., m_brush.size/2., m_brush.size);
+      gradient.setColorAt(0, m_color);
+      gradient.setColorAt(m_brush.hardness/2., m_color);
+      QColor newColor(m_color);
+      newColor.setAlphaF(0.);
+      gradient.setColorAt(.5, newColor);
+      QBrush brush(gradient);
+      paint.setBrush(brush);
+      paint.fillRect(0, 0, m_brush.size, m_brush.size, brush);
+      break;
+    }
+    case Brush::square: {
+      paint.fillRect(0, 0, m_brush.size, m_brush.size, m_color);
+      break;
+    }
+    default:
+      break;
+  }
+  paint.end();
+  m_brush_source = qpix;
+}
+
 void AppState::drawFromCoordinates(double x, double y, double width, double height) {
   QPoint point(
     qRound(qBound(0., x / width, 1.) * LED_SIZE),
     qRound(qBound(0., y / height, 1.) * LED_SIZE)
   );
-
-  QRadialGradient gradient(point.x(), point.y(), m_brush.size);
-  gradient.setColorAt(0, m_color);
-  gradient.setColorAt(m_brush.hardness, m_color);
-  QColor newColor(m_color);
-  newColor.setAlphaF(0.);
-  gradient.setColorAt(1, newColor);
-  QBrush brush(gradient);
 
   //TODO: Create Brush enum. Only use drawLine for hard brushes.
   //TODO: Add chromatic aberation to LEDGrid
@@ -85,10 +106,10 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   new_layer.fill(Qt::transparent);
   QPainter paint;
   paint.begin(&new_layer);
-  paint.setBrush(brush);
+  paint.drawImage(point.x()-m_brush.size/2, point.y()-m_brush.size/2, m_brush_source);
 
 //  if (m_last_point == nullptr) {
-    paint.drawEllipse(point.x()-m_brush.size/2, point.y()-m_brush.size/2, m_brush.size, m_brush.size);
+//    paint.fillRect(point.x()-32, point.y()-32, 64, 64, brush);
 //  } else {
 //    QPen p;
 //    p.setBrush(brush);
@@ -98,10 +119,10 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
 //    QLine line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
 //    paint.drawLine(line);
 //  }
-
+  paint.end();
   delete m_last_point;
   m_last_point = new QPoint(point.x(), point.y());
-  paint.end();
+
 
   // Merge the new layer and do not allow it to go above alpha threhold (acts like photoshop)
   m_image_layer = GraphicsUtils::mergeImages(m_image_layer, new_layer, m_color.alpha());

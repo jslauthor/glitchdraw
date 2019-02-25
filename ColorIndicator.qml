@@ -5,13 +5,10 @@ import Theme 1.0
 ColumnLayout {
     id: root
     spacing: 5
-    Text {
-        id: header
-        text: "color"
-        font.family: Theme.mainFont.name
-        font.pixelSize: Theme.h6
-        color: Theme.peach
+    Header {
+        label: "color"
     }
+
     Item {
         id: indicator
         width: 75

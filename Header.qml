@@ -7,5 +7,5 @@ Text {
     text: root.label
     font.family: Theme.mainFont.name
     font.pixelSize: Theme.h6
-    color: Theme.peach
+    color: "white"
 }

@@ -36,6 +36,8 @@ Item {
                 if (!pressed) {
                     // This paints the intermediate image onto the saved image (makes it permanent)
                     AppState.swapBuffer();
+                } else {
+                    AppState.updateBrush();
                 }
             }
         }

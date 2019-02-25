@@ -79,6 +79,9 @@ public:
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();
 
+  // This creates a new brush to use for painting
+  Q_INVOKABLE void updateBrush();
+
   void setColor(QColor &color);
   QColor color() const;
   QColor colorOpaque() const;
@@ -117,6 +120,7 @@ private:
   QImage m_image;
   QImage m_image_layer;
   QImage m_image_source;
+  QImage m_brush_source;
   BrushAnatomy m_brush;
   // Pointers
   QPoint *m_last_point;

@@ -106,23 +106,35 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   new_layer.fill(Qt::transparent);
   QPainter paint;
   paint.begin(&new_layer);
-  paint.drawImage(point.x()-m_brush.size/2, point.y()-m_brush.size/2, m_brush_source);
+  int half_brush_size = m_brush.size/2;
 
-//  if (m_last_point == nullptr) {
-//    paint.fillRect(point.x()-32, point.y()-32, 64, 64, brush);
-//  } else {
-//    QPen p;
-//    p.setBrush(brush);
-//    p.setColor(m_color);
-//    p.setWidth(3);
-//    paint.setPen(p);
-//    QLine line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
-//    paint.drawLine(line);
-//  }
+  if (m_last_point == nullptr) {
+    paint.drawImage(point.x()-half_brush_size, point.y()-half_brush_size, m_brush_source);
+  } else {
+    QLineF line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
+    qreal length = line.length();
+    qreal increment = length/100;
+    QImage temp_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
+    temp_layer.fill(Qt::transparent);
+    for (qreal x = 0.0001; x <= length; x += increment) {
+      QImage line_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
+      line_layer.fill(Qt::transparent);
+      QPainter linePainter;
+      linePainter.begin(&line_layer);
+      QPointF targetPoint(line.pointAt(x / length));
+      linePainter.drawImage(
+        static_cast<int>(targetPoint.x())-half_brush_size,
+        static_cast<int>(targetPoint.y())-half_brush_size,
+        m_brush_source);
+      linePainter.end();
+      temp_layer = GraphicsUtils::mergeImages(temp_layer, line_layer, m_color.alpha());
+    }
+    paint.drawImage(new_layer.rect(), temp_layer);
+  }
   paint.end();
+
   delete m_last_point;
   m_last_point = new QPoint(point.x(), point.y());
-
 
   // Merge the new layer and do not allow it to go above alpha threhold (acts like photoshop)
   m_image_layer = GraphicsUtils::mergeImages(m_image_layer, new_layer, m_color.alpha());

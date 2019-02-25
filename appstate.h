@@ -11,6 +11,8 @@
 #include <QBrush>
 #include <QImageWriter>
 #include <QPoint>
+#include <QLineF>
+#include <QPointF>
 #include <QDebug>
 
 #include "graphics/graphicsutils.h"

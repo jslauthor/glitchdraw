@@ -3,11 +3,11 @@
 
 #include <QThread>
 #include <QImage>
-#include <QMutex>
 #include <QWaitCondition>
 #include <led-matrix.h>
 #include <QRgb>
 #include <QDebug>
+#include <QReadWriteLock>
 
 class RenderThread : public QThread
 {
@@ -24,7 +24,7 @@ protected:
 
 private:
     QImage m_image;
-    QMutex m_mutex;
+    QReadWriteLock lock;
     rgb_matrix::Canvas *m_canvas;
 };
 

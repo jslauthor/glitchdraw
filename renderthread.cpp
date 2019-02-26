@@ -23,27 +23,28 @@ RenderThread::RenderThread(QObject *parent) : QThread(parent)
 
 RenderThread::~RenderThread()
 {
-  m_mutex.lock();
+  lock.lockForWrite();
   delete &m_image;
   m_canvas->Clear();
   delete m_canvas;
-  m_mutex.unlock();
+  lock.unlock();
 
   wait();
 }
 
 void RenderThread::render(QImage &image) {
-  QMutexLocker locker(&m_mutex);
+  lock.lockForWrite();
   this->m_image = image;
   if (!isRunning()) {
     start(HighestPriority);
   }
+  lock.unlock();
 }
 
 void RenderThread::run()
 {
   forever {
-//    m_mutex.lock();
+    lock.lockForRead();
     QImage image = m_image;
     for (int y = 0; y < LED_SIZE; y++) {
       const QRgb *s = reinterpret_cast<const QRgb*>(image.constScanLine(y));
@@ -55,6 +56,7 @@ void RenderThread::run()
         x++;
       }
     }
+    lock.unlock();
 
     //        m_canvas->Fill(100, 100, 100);
 //    m_mutex.unlock();

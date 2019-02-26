@@ -73,7 +73,7 @@ void AppState::updateBrush() {
       gradient.setColorAt(m_brush.hardness/2., m_color);
       QColor newColor(m_color);
       newColor.setAlphaF(0.);
-      gradient.setColorAt(.5, newColor);
+      gradient.setColorAt(.51, newColor);
       QBrush brush(gradient);
       paint.setBrush(brush);
       paint.fillRect(0, 0, m_brush.size, m_brush.size, brush);

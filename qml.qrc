@@ -21,5 +21,7 @@
         <file>BrushModel.qml</file>
         <file>Header.qml</file>
         <file>shaders/clipcorners.frag</file>
+        <file>RadialBrush.qml</file>
+        <file>SquareBrush.qml</file>
     </qresource>
 </RCC>

@@ -88,12 +88,79 @@ Window {
                     }
                 }
 
-                LEDGrid {
-                    id: ledGrid
+                Item {
                     Layout.fillHeight: true
                     Layout.minimumWidth: ledGrid.height
                     Layout.alignment: Qt.AlignRight
+
+                    Connections {
+                        target: AppState
+                        onBrushChanged: {
+                            brushContainer.state = "SHOWN"
+                            brushTimer.restart()
+                        }
+                    }
+
+                    Timer {
+                        id: brushTimer
+                        repeat: false
+                        interval: 500
+                        onTriggered: brushContainer.state = "HIDDEN"
+                    }
+
+                    LEDGrid {
+                        id: ledGrid
+                        anchors.fill: parent
+                    }
+                    Item {
+                        id: brushContainer
+                        anchors.centerIn: parent
+                        opacity: 0
+                        state: "HIDDEN"
+                        transitions: [
+                            Transition {
+                                from: "HIDDEN"
+                                to: "SHOWN"
+                                NumberAnimation {
+                                    target: brushContainer
+                                    property: "opacity"
+                                    duration: 250
+                                    easing.type: Easing.InCurve
+                                    from: 0
+                                    to: .9
+                                }
+                            },
+                            Transition {
+                                from: "SHOWN"
+                                to: "HIDDEN"
+                                NumberAnimation {
+                                    target: brushContainer
+                                    property: "opacity"
+                                    duration: 250
+                                    easing.type: Easing.OutCurve
+                                    from: .9
+                                    to: 0
+                                }
+                            }
+                        ]
+                        RadialBrush {
+                            anchors.centerIn: parent
+                            width: AppState.brush.size * 7.5
+                            height: AppState.brush.size * 7.5
+                            visible: AppState.brush.type === 0
+                        }
+                        SquareBrush {
+                            anchors.centerIn: parent
+                            width: AppState.brush.size * 7.5
+                            height: AppState.brush.size * 7.5
+                            visible: AppState.brush.type === 1
+                        }
+                    }
+
+
                 }
+
+
             }
 
         }

@@ -8,13 +8,13 @@
 
 int main(int argc, char *argv[])
 {
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QGuiApplication app(argc, argv);
+
   // Start LED Matrix on its own QThread
   RenderThread thread;
   // Instantiate state to provide it as global variable in QML
   AppState appState(nullptr, &thread);
-
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  QGuiApplication app(argc, argv);
 
   // Remove cursor
   QCursor cursor(Qt::BlankCursor);

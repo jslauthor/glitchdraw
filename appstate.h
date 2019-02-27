@@ -13,10 +13,15 @@
 #include <QPoint>
 #include <QLineF>
 #include <QPointF>
+#include <QTimer>
+#include <QDateTime>
+#include <QTime>
 #include <QDebug>
 
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
+
+#define COUNTDOWN_TOTAL 300;
 
 namespace Brush {
   Q_NAMESPACE
@@ -64,6 +69,7 @@ class AppState : public QObject
   Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
   Q_PROPERTY(QImage image READ image NOTIFY imageChanged)
   Q_PROPERTY(BrushAnatomy brush READ brush WRITE setBrush NOTIFY brushChanged)
+  Q_PROPERTY(QString countdownLabel READ countdownLabel NOTIFY countdownChanged)
 
 public:
   explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
@@ -101,9 +107,12 @@ public:
   qreal opacity() const;
 
   QImage image() const;
+  QString countdownLabel() const;
 
   void setBrush(const BrushAnatomy& brush);
   BrushAnatomy brush() const;
+
+  void restartCountdown();
 
 signals:
   void hueChanged();
@@ -111,8 +120,11 @@ signals:
   void opacityChanged();
   void imageChanged();
   void brushChanged();
+  void countdownChanged();
 
 public slots:
+  void updateCountdown();
+
 private:
   qreal m_hue = 0.58;
   qreal m_saturation = 0.75;
@@ -124,7 +136,9 @@ private:
   QImage m_image_source;
   QImage m_brush_source;
   BrushAnatomy m_brush;
+  int m_countdown;
   // Pointers
+  QTimer *m_timer;
   QPoint *m_last_point;
   RenderThread *m_renderThread;
 };

@@ -8,6 +8,10 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   m_image.fill(Qt::transparent);
   m_last_point = nullptr;
 
+  m_timer = new QTimer(this);
+  connect(m_timer, &QTimer::timeout, this, &AppState::updateCountdown);
+  restartCountdown();
+
   m_renderThread = thread;
   swapBuffer();
 
@@ -16,6 +20,8 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
 
 AppState::~AppState() {
   delete m_renderThread;
+  m_timer->stop();
+  delete m_timer;
 }
 
 void AppState::setHue(qreal hue) {
@@ -96,7 +102,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
     qRound(qBound(0., y / height, 1.) * LED_SIZE)
   );
 
-  //TODO: Create Brush enum. Only use drawLine for hard brushes.
+  //TODO: Make color selector circle bobble big on drag like Procreate
   //TODO: Add chromatic aberation to LEDGrid
   //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
 
@@ -149,6 +155,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
 
   emit imageChanged();
 
+  restartCountdown();
   m_renderThread->render(m_image);
 }
 
@@ -248,4 +255,23 @@ void AppState::clearCanvas() {
   swapBuffer();
   emit imageChanged();
   m_renderThread->render(m_image);
+}
+
+QString AppState::countdownLabel() const {
+  QTime time = QTime(0,0,0,0);
+  return time.addSecs(m_countdown).toString("mm:ss");
+}
+
+void AppState::restartCountdown() {
+  m_countdown = COUNTDOWN_TOTAL;
+  m_timer->start(1000);
+  emit countdownChanged();
+}
+
+void AppState::updateCountdown() {
+  m_countdown--;
+  if (m_countdown <= 0) {
+    m_countdown = COUNTDOWN_TOTAL;
+  }
+  emit countdownChanged();
 }

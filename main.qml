@@ -71,14 +71,35 @@ Window {
                         Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
                         Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
                     }
-                    ColorIndicator {
+                    RowLayout {
                         Layout.margins: 10
-                        MouseArea {
-                            width:  parent.width
-                            height: parent.height
-                            onClicked: stackView.push(colorSelector)
+                        Layout.maximumWidth: 80
+                        spacing: 0
+                        ColorIndicator {
+                            Layout.alignment: Qt.AlignLeft
+                            Layout.maximumWidth: 95
+                            MouseArea {
+                                width:  parent.width
+                                height: parent.height
+                                onClicked: stackView.push(colorSelector)
+                            }
+                        }
+                        ColumnLayout {
+                            Layout.alignment: Qt.AlignTop
+                            Header {
+                                label: "glitch countdown"
+                            }
+                            Text {
+                                Layout.topMargin: 10
+                                font.family: Theme.mainFont.name
+                                font.pixelSize: 40
+                                color: Theme.superBlue
+                                text: AppState.countdownLabel
+                            }
                         }
                     }
+
+
                     GlitchButton {
                         Layout.topMargin: 5
                         Layout.alignment: Qt.AlignCenter
@@ -174,7 +195,7 @@ Window {
                     anchors.fill: parent
                     anchors.margins: 10
                     Item {
-                        Layout.alignment: Qt.AlignTop
+                        Layout.alignment: Qt.AlignVCenter
                         Layout.minimumWidth: 30
                         Layout.maximumWidth: 30
                         Layout.minimumHeight: 30
@@ -183,18 +204,16 @@ Window {
                             id: backButton
                             source: "images/back.svg"
                             antialiasing: true
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: stackView.pop()
-                            }
-
                             anchors.fill: parent
                         }
                         ColorOverlay {
                             anchors.fill: parent
                             source: backButton
-                            color: "#FF888888"
+                            color: "white"
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: stackView.pop()
                         }
                     }
                     HSBSpectrum {
@@ -220,6 +239,4 @@ Window {
 
         }
     }
-
-
 }

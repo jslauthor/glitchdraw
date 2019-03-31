@@ -23,5 +23,6 @@
         <file>shaders/clipcorners.frag</file>
         <file>RadialBrush.qml</file>
         <file>SquareBrush.qml</file>
+        <file>shaders/chromatic_abberation.frag</file>
     </qresource>
 </RCC>

@@ -85,6 +85,7 @@ Window {
                             }
                         }
                         ColumnLayout {
+                            id: countdownContainer
                             Layout.alignment: Qt.AlignTop
                             Header {
                                 label: "glitch countdown"
@@ -238,5 +239,12 @@ Window {
             }
 
         }
+
+        layer.enabled: true
+        layer.effect: ShaderEffect {
+            blending: true
+            fragmentShader: "qrc:/shaders/chromatic_abberation.frag"
+        }
     }
+
 }

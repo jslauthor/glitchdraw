@@ -24,5 +24,7 @@
         <file>RadialBrush.qml</file>
         <file>SquareBrush.qml</file>
         <file>shaders/chromatic_abberation.frag</file>
+        <file>shaders/default.vsh</file>
+        <file>shaders/glitch.fsh</file>
     </qresource>
 </RCC>

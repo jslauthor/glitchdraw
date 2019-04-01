@@ -17,7 +17,9 @@ SOURCES += \
     main.cpp \
     qimageproxy.cpp \
     graphics/graphicsutils.cpp \
-    renderthread.cpp
+    renderthread.cpp \
+    glitchtimer.cpp \
+    glitchpainter.cpp
 
 RESOURCES += qml.qrc \
     imports/Theme/Theme.qml \
@@ -43,7 +45,9 @@ HEADERS += \
     appstate.h \
     qimageproxy.h \
     graphics/graphicsutils.h \
-    renderthread.h
+    renderthread.h \
+    glitchtimer.h \
+    glitchpainter.h
 
 unix:!macx: LIBS += -L$$PWD/rpi-rgb-led-matrix/lib/ -lrgbmatrix
 

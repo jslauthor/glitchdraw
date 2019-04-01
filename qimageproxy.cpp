@@ -12,5 +12,5 @@ QImage QImageProxy::image() const {
 }
 
 void QImageProxy::paint(QPainter *painter) {
-  painter->drawImage(m_image.rect(), m_image);
+  painter->drawImage(QRect(0, 0, width(), height()), m_image);
 }

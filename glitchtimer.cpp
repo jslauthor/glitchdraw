@@ -16,7 +16,6 @@ void GlitchTimer::run(QImage &img) {
 void GlitchTimer::restart() {
   this->stop();
   m_temp_image = QImage(m_image);
-  m_ranges = m_painter.generateRanges(15, m_temp_image.size().height());
   m_timerId = startTimer(16);
   m_time.restart();
   emit glitchStarted();
@@ -35,8 +34,8 @@ void GlitchTimer::timerEvent(QTimerEvent * /*event*/)
   if (durationProgress >= 1.) {
     this->stop();
     emit glitchCompleted();
+  } else {
+    m_image = m_painter.paint(m_temp_image, percent, m_time.elapsed(), .25);
+    emit imageChanged(m_image);
   }
-
-  m_image = m_painter.paint(m_temp_image, m_ranges, percent, m_time.elapsed(), .25);
-  emit imageChanged();
 }

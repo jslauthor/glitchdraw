@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "appstate.h"
 
 AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
@@ -7,6 +9,11 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   m_image = QImage(LED_SIZE, LED_SIZE, QImage::Format_ARGB32_Premultiplied);
   m_image.fill(Qt::transparent);
   m_last_point = nullptr;
+
+  m_glitch_timer = new GlitchTimer(this);
+  connect(m_glitch_timer, &GlitchTimer::glitchStarted, this, &AppState::onGlitchStarted);
+  connect(m_glitch_timer, &GlitchTimer::glitchCompleted, this, &AppState::onGlitchCompleted);
+  connect(m_glitch_timer, &GlitchTimer::imageChanged, this, &AppState::onImageChanged);
 
   m_timer = new QTimer(this);
   connect(m_timer, &QTimer::timeout, this, &AppState::updateCountdown);
@@ -22,6 +29,7 @@ AppState::~AppState() {
   delete m_renderThread;
   m_timer->stop();
   delete m_timer;
+  delete m_glitch_timer;
 }
 
 void AppState::setHue(qreal hue) {
@@ -271,7 +279,24 @@ void AppState::restartCountdown() {
 void AppState::updateCountdown() {
   m_countdown--;
   if (m_countdown <= 0) {
-    m_countdown = COUNTDOWN_TOTAL;
+    m_timer->stop();
+    m_glitch_timer->run(m_image);
   }
   emit countdownChanged();
+}
+
+void AppState::onGlitchStarted() {
+
+}
+
+void AppState::onGlitchCompleted() {
+  swapBuffer();
+  restartCountdown();
+}
+
+void AppState::onImageChanged(QImage image) {
+//  qInfo("%d %d", image.size().width(), image.size().height());
+  m_image = QImage(std::move(image));
+  emit imageChanged();
+  m_renderThread->render(m_image);
 }

@@ -2,7 +2,7 @@
 
 GlitchPainter::GlitchPainter(QObject *parent) : QObject(parent)
 {
-    format.setVersion(2, 0);
+    format.setVersion(2, 1);
     surface.setFormat(format);
     surface.create();
 
@@ -15,34 +15,31 @@ GlitchPainter::GlitchPainter(QObject *parent) : QObject(parent)
 
     fboFormat.setSamples(16);
     fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-}
 
-void GlitchPainter::nativePainting(
-    QOpenGLFramebufferObject &fbo,
-    std::vector<ShiftRange> &ranges,
-    qreal percent = .64,
-    int time = 1000,
-    qreal glitchScale = .5) {
-
-    QOpenGLShaderProgram program;
+    // Create program and compile shaders
 
     program.addShaderFromSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/shaders/default.vsh"));
-    program.addShaderFromSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/shaders/glitch.fsh"));
+    program.addShaderFromSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/shaders/glitch.frag"));
 
     program.bindAttributeLocation("qt_Vertex", 0);
     program.bindAttributeLocation("qt_MultiTexCoord0", 1);
 
     program.link();
+
+    matrixLocation = program.uniformLocation("qt_Matrix");
+    resolutionLocation = program.uniformLocation("iResolution");
+    timeLocation = program.uniformLocation("iTime");
+    glitchScaleLocation = program.uniformLocation("glitchScale");
+    percentLocation = program.uniformLocation("percent");
+}
+
+void GlitchPainter::nativePainting(
+    QOpenGLFramebufferObject &fbo,
+    qreal percent = .64,
+    int time = 1000,
+    qreal glitchScale = .5
+) {
     program.bind();
-
-    int numRangesLocation = program.uniformLocation("numRanges");
-    int shiftAmountLocation = program.uniformLocation("shiftAmount");
-
-    int matrixLocation = program.uniformLocation("qt_Matrix");
-    int resolutionLocation = program.uniformLocation("iResolution");
-    int timeLocation = program.uniformLocation("iTime");
-    int glitchScaleLocation = program.uniformLocation("glitchScale");
-    int percentLocation = program.uniformLocation("percent");
 
     static QSize size(fbo.size());
     static QPointF p0(size.width(), size.height());
@@ -95,24 +92,11 @@ void GlitchPainter::nativePainting(
 
     program.setUniformValue(matrixLocation, pmvMatrix);
     program.setUniformValue(resolutionLocation, size);
-    program.setUniformValue(timeLocation, time);
+    program.setUniformValue(timeLocation, static_cast<float>(time));
     program.setUniformValue(glitchScaleLocation, static_cast<float>(glitchScale));
     program.setUniformValue(percentLocation, static_cast<float>(percent));
 
-    int counter = 0;
-    QString str = "ranges[%1].%2";
-    for (std::vector<ShiftRange>::iterator it = ranges.begin() ; it != ranges.end(); ++it) {
-        ShiftRange range = *it;
-        program.setUniformValue(qPrintable(str.arg(QString::number(counter), "start")), range.start);
-        program.setUniformValue(qPrintable(str.arg(QString::number(counter), "length")), range.height);
-        program.setUniformValue(qPrintable(str.arg(QString::number(counter), "direction")), range.direction);
-        counter++;
-    }
-
-    program.setUniformValue(numRangesLocation, static_cast<int>(ranges.size()));
-    program.setUniformValue(shiftAmountLocation, .25f);
-
-    glBindTexture(GL_TEXTURE_2D, fbo.texture()); // provide sampler2D source
+//    glBindTexture(GL_TEXTURE_2D, fbo.texture()); // provide sampler2D source
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -123,27 +107,8 @@ void GlitchPainter::nativePainting(
     textureCoordinatesBuffer.release();
 }
 
-std::vector<ShiftRange> GlitchPainter::generateRanges(int amount, double height) {
-    std::vector<ShiftRange> ranges;
-    GLfloat shiftYIndex = 0.;
-    // Set Ranges
-    for (float x = 0.; x < amount; x++) {
-        shiftYIndex = shiftYIndex + static_cast<GLfloat>(QRandomGenerator::global()->bounded(height*.05));
-        GLfloat shiftHeight = static_cast<GLfloat>(QRandomGenerator::global()->bounded(height*.15));
-        ShiftRange range = {
-            shiftYIndex,
-            shiftHeight,
-            std::fmod(x, 2.) == 0. ? -1.f : 1.f
-        };
-        shiftYIndex += shiftHeight + static_cast<GLfloat>(QRandomGenerator::global()->bounded(height*.1));
-        ranges.push_back(range);
-    }
-    return ranges;
-}
-
 QImage GlitchPainter::paint(
   QImage &image,
-  std::vector<ShiftRange> &ranges,
   qreal percent = .64,
   int time = 1000,
   qreal glitchScale = .5
@@ -154,16 +119,15 @@ QImage GlitchPainter::paint(
     QOpenGLPaintDevice device(image.size());
     QPainter painter;
     painter.begin(&device);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing);
+//    painter.setRenderHints(QPainter::Antialiasing | QPainter::HighQualityAntialiasing);
 
     painter.drawImage(image.rect(), image);
 
     painter.beginNativePainting();
-    nativePainting(fbo, ranges, percent, time, glitchScale);
+    nativePainting(fbo, percent, time, glitchScale);
     painter.endNativePainting();
 
     painter.end();
-
     fbo.release();
-    return fbo.toImage();
+    return fbo.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
 }

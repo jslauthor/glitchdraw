@@ -1,5 +1,3 @@
-#version 120
-
 #ifdef GL_ES
     #ifdef GL_FRAGMENT_PRECISION_HIGH
         precision highp float;
@@ -8,41 +6,98 @@
     #endif // GL_FRAGMENT_PRECISION_HIGH
 #endif // GL_ES
 
-struct Range
+uniform float iTime;
+
+// Modified https://www.shadertoy.com/view/Xt3XzH
+
+// A simple implementation of sine waves along a given, unnormalized velocity
+
+const float TAU = 6.2831852;
+const float PI = 0.5 * TAU; // This is a political statement
+
+const float octaves = 8.0;
+const vec2 globalVelocity = vec2(25.0, 50.0);
+
+// Hash without Sine by Dave Hoskins
+// https://www.shadertoy.com/view/4djSRW
+float hash11(float p)
 {
-  float start;
-  float length;
-  float direction;
-};
+    const float HASHSCALE1 = .1031;
+        vec3 p3  = fract(vec3(p) * HASHSCALE1);
+    p3 += dot(p3, p3.yzx + 19.19);
+    return fract((p3.x + p3.y) * p3.z);
+}
 
-uniform Range ranges[100]; // 100 max ranges
-uniform int numRanges;
-uniform float shiftAmount = .25;
+float getAmplitude(float octave)
+{
+    return 1.0 / pow(2.0, octave);
+}
 
-float getShiftAmount(float location) {
-    for (int x = 0; x < numRanges; x++) {
-        Range range = ranges[x];
-        if (location >= range.start && location <= range.length + range.start) {
-            return range.direction;
-        }
+float getWavelength(float octave)
+{
+        const float maximumWavelength = 50.0;
+
+    float wavelength = TAU * maximumWavelength / pow(2.0, octave);
+
+    // Make it aperiodic with a random factor
+    wavelength *= 0.75 + 0.5 * hash11(1.337 * octave);
+
+    return wavelength;
+}
+
+float getSpeed(float octave)
+{
+    const float speedScaleFactor = 2.0;
+
+    // Smallest waves travel twice as fast as given velocity,
+    // largest waves travel half as fast
+    const vec2 speedRange = vec2(5.0, 0.1);
+
+    // Map octave to speed range
+    float speed = speedScaleFactor * mix(speedRange.x, speedRange.y, octave / (max(1.0, octaves - 1.0)));
+
+    // Add some randomness
+    speed *= hash11(1.337 * octave);
+
+    return speed;
+}
+
+float getShift(vec2 position, vec2 velocity, float percent)
+{
+    float magnitude = length(velocity);
+    vec2 direction = (magnitude > 1e-5) ? velocity / magnitude : vec2(0.0);
+
+    float height = 0.0;
+
+    for (float octave = 0.0; octave < octaves; octave += 1.0)
+    {
+        float amplitude = getAmplitude(octave);
+        float wavelength = getWavelength(octave);
+        float speed = magnitude * getSpeed(octave);
+        float frequency = TAU / wavelength;
+        float randomPhaseOffset = hash11(1.337 * octave) * TAU;
+        float phase = speed * frequency + randomPhaseOffset;
+        float theta = dot(-direction, position);
+
+        height += amplitude * sin(theta * frequency + (percent * 100.) * phase);
     }
-    return 0.;
+
+    return height;
 }
 
 // I take zero credit for any of the below code. I modified it to suit my needs in Qt, but
 // all the credit goes to tdhooper on shadertoy: https://www.shadertoy.com/view/XtyXzW
-// Leonard Souza
 
 uniform sampler2D source;
 varying highp vec2 qt_TexCoord0;
+varying float yCoord;
 
 uniform vec2 iResolution;
-uniform float iTime;
 uniform float glitchScale;
 uniform float percent;
 
-float time;
-vec2 coord;
+highp float time;
+highp vec2 coord;
 
 float round(float n) {
     return floor(n + .5);
@@ -250,8 +305,10 @@ void main()
 
     coord = iResolution * qt_TexCoord0;
     vec2 p = qt_TexCoord0;
-    // Shift supplied ranges
-    p.x += (shiftAmount * percent) * getShiftAmount(floor(coord.y));
+
+    vec2 velocity = vec2(length(globalVelocity), 10.0);
+    float shiftAmount = getShift(vec2(coord.y, 0.0), velocity, percent);
+    p.x += .25 * shiftAmount;
 
     glitchSwap(p);
     glitchTime(p, time);

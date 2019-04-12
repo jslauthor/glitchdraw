@@ -8,12 +8,6 @@
 #include <QOpenGLFunctions>
 #include <QDebug>
 
-struct ShiftRange {
-    GLfloat start;
-    GLfloat height;
-    GLfloat direction;
-};
-
 class GlitchPainter : public QObject, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -22,20 +16,16 @@ public:
 
     QImage paint(
         QImage &image,
-        std::vector<ShiftRange> &ranges,
         qreal percent,
         int time,
         qreal glitchScale
     );
     void nativePainting(
         QOpenGLFramebufferObject &fbo,
-        std::vector<ShiftRange> &ranges,
         qreal percent,
         int time,
         qreal glitchScale
     );
-
-    std::vector<ShiftRange> generateRanges(int amount, double height);
 
 signals:
 
@@ -46,7 +36,13 @@ private:
     QOffscreenSurface surface;
     QOpenGLContext context;
     QOpenGLFramebufferObjectFormat fboFormat;
-    std::vector<ShiftRange> ranges;
+
+    QOpenGLShaderProgram program;
+    int matrixLocation;
+    int resolutionLocation;
+    int timeLocation;
+    int glitchScaleLocation;
+    int percentLocation;
 };
 
 #endif // GLITCHPAINTER_H

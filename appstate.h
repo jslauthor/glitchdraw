@@ -18,10 +18,11 @@
 #include <QTime>
 #include <QDebug>
 
+#include "glitchtimer.h"
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
 
-#define COUNTDOWN_TOTAL 300;
+#define COUNTDOWN_TOTAL 3;
 
 namespace Brush {
   Q_NAMESPACE
@@ -124,6 +125,9 @@ signals:
 
 public slots:
   void updateCountdown();
+  void onGlitchStarted();
+  void onGlitchCompleted();
+  void onImageChanged(QImage);
 
 private:
   qreal m_hue = 0.58;
@@ -136,11 +140,12 @@ private:
   QImage m_image_source;
   QImage m_brush_source;
   BrushAnatomy m_brush;
-  int m_countdown;
+  int m_countdown = 300;
   // Pointers
   QTimer *m_timer;
   QPoint *m_last_point;
   RenderThread *m_renderThread;
+  GlitchTimer *m_glitch_timer;
 };
 
 #endif // APPSTATE_H

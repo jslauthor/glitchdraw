@@ -25,7 +25,7 @@ public:
   void run(QImage &img);
 
 signals:
-  void imageChanged();
+  void imageChanged(QImage);
   void glitchStarted();
   void glitchCompleted();
 
@@ -39,7 +39,6 @@ private:
   QTime m_time;
   int m_timerId = -1;
   QEasingCurve m_easing = QEasingCurve(QEasingCurve::OutInElastic);
-  std::vector<ShiftRange> m_ranges;
 
 protected:
   void restart();

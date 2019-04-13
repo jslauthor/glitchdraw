@@ -111,7 +111,6 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   );
 
   //TODO: Make color selector circle bobble big on drag like Procreate
-  //TODO: Add chromatic aberation to LEDGrid
   //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
 
   // Create a new layer and paint onto it
@@ -279,6 +278,7 @@ void AppState::restartCountdown() {
 void AppState::updateCountdown() {
   m_countdown--;
   if (m_countdown <= 0) {
+    emit glitchImminent();
     m_timer->stop();
     m_glitch_timer->run(m_image);
   }

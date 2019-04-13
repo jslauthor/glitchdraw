@@ -122,6 +122,7 @@ signals:
   void imageChanged();
   void brushChanged();
   void countdownChanged();
+  void glitchImminent();
 
 public slots:
   void updateCountdown();

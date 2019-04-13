@@ -316,5 +316,5 @@ void main()
     vec3 color = texture2D(source, p).rgb;
     glitchColor(p, color);
 
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color * mix(.25, 1., rand(p)), 1.0);
 }

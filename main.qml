@@ -10,12 +10,22 @@ Window {
     visible: true
     width: 800
     height: 480
-    title: qsTr("Retro LEDoodler")
+    title: qsTr("Glitch Paint")
 
     Image {
         anchors.fill: parent
         source: "images/app_bg.jpg"
         antialiasing: true
+    }
+
+    Connections {
+        target: AppState
+        onGlitchImminent: {
+            // This will only work with one nested screen
+            if (stackView.depth !== 1) {
+                stackView.pop();
+            }
+        }
     }
 
     StackView {

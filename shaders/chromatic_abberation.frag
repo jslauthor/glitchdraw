@@ -9,11 +9,17 @@
 uniform sampler2D source;
 varying highp vec2 qt_TexCoord0;
 
+uniform float strength;
+uniform float turbulence;
+uniform float time;
+
 void main(void)
 {
     vec2 uv = qt_TexCoord0;
 
-    vec2 d = abs((uv - 0.5) * 2.0);
+    float turbulenceFactor = mix(0., turbulence, abs(sin(time)));
+
+    vec2 d = abs((uv - 0.5) * (strength + turbulenceFactor));
     d = pow(d, vec2(2.0, 2.0));
 
     vec4 r = texture2D(source, uv - d * 0.003);

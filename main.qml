@@ -7,10 +7,15 @@ import LeonardSouza 1.0
 import Theme 1.0
 
 Window {
+    id: rootWindow
     visible: true
     width: 800
     height: 480
     title: qsTr("Glitch Paint")
+
+    // Holds a time factor (count) so that sin() has
+    // a number process
+    property real time: 0
 
     Image {
         anchors.fill: parent
@@ -22,9 +27,20 @@ Window {
         target: AppState
         onGlitchImminent: {
             // This will only work with one nested screen
+            // Not the best idea for a full on production app :P
             if (stackView.depth !== 1) {
                 stackView.pop();
             }
+        }
+    }
+
+    Timer {
+        interval: 16
+        running: true
+        repeat: true
+        onTriggered: {
+            // No need to let the count run on and on
+            time = time >= 500 ? 0 : time + 1;
         }
     }
 
@@ -247,11 +263,13 @@ Window {
                     }
                 }
             }
-
         }
 
         layer.enabled: true
         layer.effect: ShaderEffect {
+            property real strength: 2
+            property real turbulence: 5
+            property real time: rootWindow.time
             blending: true
             fragmentShader: "qrc:/shaders/chromatic_abberation.frag"
         }

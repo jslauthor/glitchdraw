@@ -295,7 +295,6 @@ void AppState::onGlitchCompleted() {
 }
 
 void AppState::onImageChanged(QImage image) {
-//  qInfo("%d %d", image.size().width(), image.size().height());
   m_image = QImage(std::move(image));
   emit imageChanged();
   m_renderThread->render(m_image);

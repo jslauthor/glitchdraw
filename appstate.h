@@ -22,7 +22,7 @@
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
 
-#define COUNTDOWN_TOTAL 3;
+#define COUNTDOWN_TOTAL 15;
 
 namespace Brush {
   Q_NAMESPACE

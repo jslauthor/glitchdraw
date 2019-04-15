@@ -314,7 +314,8 @@ void main()
     glitchTime(p, time);
     glitchStatic(p);
     vec3 color = texture2D(source, p).rgb;
+    float alpha = texture2D(source, p).a;
     glitchColor(p, color);
 
-    gl_FragColor = vec4(color * mix(.25, 1., rand(p)), 1.0);
+    gl_FragColor = vec4(color * mix(.25, 1., rand(p)), alpha);
 }

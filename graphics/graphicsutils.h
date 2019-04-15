@@ -3,6 +3,7 @@
 
 #include <QImage>
 #include <QRgba64>
+#include <QEasingCurve>
 
 class GraphicsUtils
 {
@@ -13,6 +14,11 @@ public:
       const QImage &destination,
       int alpha_threshold
   );
+
+  static qreal getGlitchAmountForCountdown(float);
+
+private:
+  static const QEasingCurve m_easing;
 
 };
 

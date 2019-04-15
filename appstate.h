@@ -22,8 +22,6 @@
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
 
-#define COUNTDOWN_TOTAL 15;
-
 namespace Brush {
   Q_NAMESPACE
   enum Brushes {
@@ -84,6 +82,7 @@ public:
   Q_INVOKABLE void setBrushSize(int size);
   Q_INVOKABLE void setBrushHardness(qreal hardness);
   Q_INVOKABLE void clearCanvas();
+  Q_INVOKABLE qreal getCountProgress();
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();
@@ -141,7 +140,8 @@ private:
   QImage m_image_source;
   QImage m_brush_source;
   BrushAnatomy m_brush;
-  int m_countdown = 300;
+  int m_countdownTotal = 15;
+  int m_countdown = m_countdownTotal;
   // Pointers
   QTimer *m_timer;
   QPoint *m_last_point;

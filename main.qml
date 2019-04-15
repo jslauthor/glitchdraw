@@ -16,6 +16,8 @@ Window {
     // Holds a time factor (count) so that sin() has
     // a number process
     property real time: 0
+    // An easing interpolated percentage to drive glitchiness
+    property real countdownProgress: 0
 
     Image {
         anchors.fill: parent
@@ -31,6 +33,9 @@ Window {
             if (stackView.depth !== 1) {
                 stackView.pop();
             }
+        }
+        onCountdownChanged: {
+            countdownProgress = Math.round(AppState.getCountProgress() * 100) / 100;
         }
     }
 
@@ -267,8 +272,8 @@ Window {
 
         layer.enabled: true
         layer.effect: ShaderEffect {
-            property real strength: 2
-            property real turbulence: 5
+            property real strength: 2 + (countdownProgress * 7)
+            property real turbulence: countdownProgress * 8
             property real time: rootWindow.time
             blending: true
             fragmentShader: "qrc:/shaders/chromatic_abberation.frag"

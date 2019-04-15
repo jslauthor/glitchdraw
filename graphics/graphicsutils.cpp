@@ -1,6 +1,8 @@
 #include "graphicsutils.h"
 #include <QDebug>
 
+const QEasingCurve GraphicsUtils::m_easing = QEasingCurve(QEasingCurve::InExpo);
+
 QImage GraphicsUtils::mergeImages(const QImage &source, const QImage &destination, int alpha_threshold)
 {
   if (source.width() != destination.width() || source.height() != destination.height()) {
@@ -29,4 +31,8 @@ QImage GraphicsUtils::mergeImages(const QImage &source, const QImage &destinatio
   }
 
   return mergedImage;
+}
+
+qreal GraphicsUtils::getGlitchAmountForCountdown(float progress) {
+  return m_easing.valueForProgress(progress);
 }

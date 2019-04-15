@@ -261,6 +261,7 @@ void AppState::clearCanvas() {
   m_image.fill(Qt::transparent);
   swapBuffer();
   emit imageChanged();
+  restartCountdown();
   m_renderThread->render(m_image);
 }
 
@@ -269,8 +270,13 @@ QString AppState::countdownLabel() const {
   return time.addSecs(m_countdown).toString("mm:ss");
 }
 
+qreal AppState::getCountProgress() {
+  float percent = 1. - static_cast<float>(m_countdown) / static_cast<float>(m_countdownTotal);
+  return std::max(GraphicsUtils::getGlitchAmountForCountdown(percent), 0.);
+}
+
 void AppState::restartCountdown() {
-  m_countdown = COUNTDOWN_TOTAL;
+  m_countdown = m_countdownTotal;
   m_timer->start(1000);
   emit countdownChanged();
 }

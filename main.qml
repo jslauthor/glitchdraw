@@ -225,23 +225,30 @@ Window {
                 Layout.fillHeight: true
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.margins: 20
                     Item {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.minimumWidth: 30
-                        Layout.maximumWidth: 30
-                        Layout.minimumHeight: 30
-                        Layout.maximumHeight: 30
+                        Layout.minimumWidth: 40
+                        Layout.fillHeight: true
+                        Rectangle {
+                            color: "transparent"
+                            anchors.fill: parent
+                        }
+
                         Image {
+                            Layout.alignment: Qt.AlignVCenter
                             id: backButton
                             source: "images/back.svg"
                             antialiasing: true
-                            anchors.fill: parent
+                            width: 40
+                            height: 40
+                            anchors.centerIn: parent
                         }
                         ColorOverlay {
-                            anchors.fill: parent
+                            anchors.centerIn: parent
                             source: backButton
                             color: "white"
+                            width: backButton.width
+                            height: backButton.height
                         }
                         MouseArea {
                             anchors.fill: parent
@@ -256,13 +263,13 @@ Window {
                     }
                     AlphaGradient {
                         z: 0
-                        Layout.minimumWidth: 50
+                        Layout.minimumWidth: 75
                         Layout.fillHeight: true
                         Layout.leftMargin: 15
                     }
                     HueGradient {
                         z: 0
-                        Layout.minimumWidth: 50
+                        Layout.minimumWidth: 75
                         Layout.fillHeight: true
                         Layout.leftMargin: 15
                     }

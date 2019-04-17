@@ -8,7 +8,7 @@ ListView {
     model: BrushModel {}
     currentIndex: AppState.brush.type
     orientation: ListView.Horizontal
-    implicitHeight: 75
+    implicitHeight: 65
     implicitWidth: childrenRect.width
     spacing: 20
     signal itemClicked(int brush)

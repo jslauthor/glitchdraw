@@ -13,6 +13,7 @@ QtObject {
 
     readonly property real h6: 8;
     readonly property real h2: 16;
+    readonly property real h1: 20;
 
     readonly property real clipSize: 7;
 

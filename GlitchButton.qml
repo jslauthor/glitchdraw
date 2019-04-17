@@ -22,24 +22,28 @@ Button {
                 }
         }
         label: RowLayout {
-
-            Image {
+            RowLayout {
                 Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
-                source: "images/skull.svg"
-                antialiasing: true
                 Layout.margins: 10
-                Layout.rightMargin: 5
+                Layout.fillWidth: true
+                Image {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    source: "images/skull.svg"
+                    antialiasing: true
+                    Layout.rightMargin: 5
+                }
+
+                Text {
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    text: root.label
+                    color: "#FFFFFF"
+                    font.family: Theme.mainFont.name
+                    font.pixelSize: Theme.h2
+                    Layout.leftMargin: 0
+                    Layout.topMargin: 1
+                }
             }
 
-            Text {
-                Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
-                text: root.label
-                color: "#FFFFFF"
-                font.family: Theme.mainFont.name
-                font.pixelSize: Theme.h2
-                Layout.margins: 10
-                Layout.leftMargin: 0
-            }
         }
     }
 }

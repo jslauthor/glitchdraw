@@ -14,7 +14,7 @@ Window {
     title: qsTr("Glitch Paint")
 
     // Holds a time factor (count) so that sin() has
-    // a number process
+    // a number to process
     property real time: 0
     // An easing interpolated percentage to drive glitchiness
     property real countdownProgress: 0
@@ -66,12 +66,109 @@ Window {
                     ColumnLayout {
                         Layout.margins: 10
                         spacing: 5
-                        Header {
-                            text: "brushes"
+                        RowLayout {
+                            Layout.fillWidth: true
+                            Item {
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                Layout.minimumWidth: 40
+                                Layout.minimumHeight: 40
+                                Image {
+                                    Layout.alignment: Qt.AlignVCenter
+                                    id: webflowLogo
+                                    source: "images/webflow.svg"
+                                    antialiasing: true
+                                    fillMode: Image.PreserveAspectFit
+                                    width: 40
+                                    anchors.centerIn: parent
+                                }
+                                ColorOverlay {
+                                    anchors.centerIn: parent
+                                    source: webflowLogo
+                                    color: "white"
+                                    width: webflowLogo.width
+                                    height: webflowLogo.height
+                                }
+                            }
+
+                            Text {
+                                Layout.alignment: Qt.AlignVCenter
+                                text: "glitch draw"
+                                font.family: Theme.mainFont.name
+                                font.pixelSize: Theme.h1
+                                Layout.leftMargin: 20
+                                color: "white"
+                            }
                         }
-                        BrushSelector {
-                            onItemClicked: AppState.setBrushType(brush);
+
+                        RowLayout {
+                            ColumnLayout {
+                                Header {
+                                    text: "brushes"
+                                }
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    BrushSelector {
+                                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                        onItemClicked: AppState.setBrushType(brush);
+                                    }
+                                    Item {
+                                        Layout.fillWidth: true
+                                        height: 10
+                                    }
+
+                                }
+                            }
+                            Rectangle {
+                                color: "white"
+                                Layout.alignment: Qt.AlignCenter
+                                Layout.fillHeight: true
+                                width: 1
+                                Layout.rightMargin: 35
+                                Layout.topMargin: 15
+                                Layout.bottomMargin: 15
+                                opacity: .25
+                            }
+
+                            ColumnLayout {
+                                Header {
+                                    text: "settings"
+                                }
+                                Item {
+                                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                    Layout.minimumWidth: 60
+                                    Layout.minimumHeight: 60
+                                    Rectangle {
+                                        color: "transparent"
+                                        anchors.fill: parent
+                                    }
+
+                                    Image {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        id: settingsButton
+                                        source: "images/settings.svg"
+                                        antialiasing: true
+                                        width: 60
+                                        height: 60
+                                        anchors.centerIn: parent
+                                    }
+                                    ColorOverlay {
+                                        anchors.centerIn: parent
+                                        source: settingsButton
+                                        color: Theme.alertRed
+                                        width: settingsButton.width
+                                        height: settingsButton.height
+                                    }
+                                    MouseArea {
+                                        anchors.fill: parent
+    //                                    onClicked: stackView.pop()
+                                    }
+                                }
+                            }
                         }
+
+
+
+
                     }
                     ConfigSlider {
                         id: brushSizeConfig
@@ -133,7 +230,9 @@ Window {
 
 
                     GlitchButton {
-                        Layout.topMargin: 5
+                        Layout.margins: 5
+                        Layout.bottomMargin: 10
+                        Layout.fillWidth: true
                         Layout.alignment: Qt.AlignCenter
                         backgroundColor: Theme.alertRed
                         onClicked: AppState.clearCanvas()

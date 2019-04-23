@@ -28,5 +28,6 @@
         <file>shaders/glitch.frag</file>
         <file>images/settings.svg</file>
         <file>images/webflow.svg</file>
+        <file>SettingsPopup.qml</file>
     </qresource>
 </RCC>

@@ -69,6 +69,7 @@ class AppState : public QObject
   Q_PROPERTY(QImage image READ image NOTIFY imageChanged)
   Q_PROPERTY(BrushAnatomy brush READ brush WRITE setBrush NOTIFY brushChanged)
   Q_PROPERTY(QString countdownLabel READ countdownLabel NOTIFY countdownChanged)
+  Q_PROPERTY(int countdownTotal READ countdownTotal WRITE setCountdownTotal NOTIFY countdownTotalChanged)
 
 public:
   explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
@@ -83,6 +84,7 @@ public:
   Q_INVOKABLE void setBrushHardness(qreal hardness);
   Q_INVOKABLE void clearCanvas();
   Q_INVOKABLE qreal getCountProgress();
+  Q_INVOKABLE QString formatTime(int seconds) const;
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();
@@ -112,6 +114,9 @@ public:
   void setBrush(const BrushAnatomy& brush);
   BrushAnatomy brush() const;
 
+  Q_INVOKABLE void setCountdownTotal(int total);
+  int countdownTotal() const;
+
   void restartCountdown();
 
 signals:
@@ -122,6 +127,7 @@ signals:
   void brushChanged();
   void countdownChanged();
   void glitchImminent();
+  void countdownTotalChanged();
 
 public slots:
   void updateCountdown();

@@ -49,6 +49,16 @@ Window {
         }
     }
 
+    SettingsPopup {
+        id: settingsPopup
+        x: Math.round((parent.width - width) / 2)
+        y: Math.round((parent.height - height) / 2)
+        onTimeChanged: {
+            console.log(seconds)
+            AppState.setCountdownTotal(seconds)
+        }
+    }
+
     StackView {
         id: stackView
         initialItem: drawingInterface
@@ -160,7 +170,7 @@ Window {
                                     }
                                     MouseArea {
                                         anchors.fill: parent
-    //                                    onClicked: stackView.pop()
+                                        onClicked: settingsPopup.open()
                                     }
                                 }
                             }

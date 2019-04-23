@@ -10,6 +10,7 @@ QtObject {
     readonly property color superBlue: "#00FFE6"
     readonly property color peach: "#F47F57"
     readonly property color alertRed: "#FF0055"
+    readonly property color pink: "#FCE3EB"
 
     readonly property real h6: 8;
     readonly property real h2: 16;

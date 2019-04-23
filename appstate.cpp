@@ -265,9 +265,13 @@ void AppState::clearCanvas() {
   m_renderThread->render(m_image);
 }
 
-QString AppState::countdownLabel() const {
+QString AppState::formatTime(int seconds) const {
   QTime time = QTime(0,0,0,0);
-  return time.addSecs(m_countdown).toString("mm:ss");
+  return time.addSecs(seconds).toString("mm:ss");
+}
+
+QString AppState::countdownLabel() const {
+  return formatTime(m_countdown);
 }
 
 qreal AppState::getCountProgress() {
@@ -304,4 +308,14 @@ void AppState::onImageChanged(QImage image) {
   m_image = QImage(std::move(image));
   emit imageChanged();
   m_renderThread->render(m_image);
+}
+
+
+void AppState::setCountdownTotal(int total) {
+  m_countdownTotal = total;
+  restartCountdown();
+}
+
+int AppState::countdownTotal() const {
+  return m_countdownTotal;
 }

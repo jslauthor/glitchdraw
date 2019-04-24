@@ -11,10 +11,13 @@ QtObject {
     readonly property color peach: "#F47F57"
     readonly property color alertRed: "#FF0055"
     readonly property color pink: "#FCE3EB"
+    readonly property color orange: "#FFB000"
 
     readonly property real h6: 8;
+    readonly property real h5: 11;
     readonly property real h2: 16;
     readonly property real h1: 20;
+    readonly property real huge: 28;
 
     readonly property real clipSize: 7;
 

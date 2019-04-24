@@ -314,6 +314,7 @@ void AppState::onImageChanged(QImage image) {
 void AppState::setCountdownTotal(int total) {
   m_countdownTotal = total;
   restartCountdown();
+  emit countdownTotalChanged();
 }
 
 int AppState::countdownTotal() const {

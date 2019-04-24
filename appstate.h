@@ -146,7 +146,7 @@ private:
   QImage m_image_source;
   QImage m_brush_source;
   BrushAnatomy m_brush;
-  int m_countdownTotal = 15;
+  int m_countdownTotal = 300;
   int m_countdown = m_countdownTotal;
   // Pointers
   QTimer *m_timer;

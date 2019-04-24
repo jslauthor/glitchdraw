@@ -24,7 +24,7 @@ Popup {
             seconds: 60
         }
         ListElement {
-            name: "ahh!"
+            name: "ahhh"
             seconds: 20
         }
     }
@@ -38,6 +38,7 @@ Popup {
         }
         ColumnLayout {
             anchors.fill: parent
+
             Text {
                 Layout.alignment: Qt.AlignHCenter
                 text: "time until glitch"
@@ -45,44 +46,79 @@ Popup {
                 font.pixelSize: Theme.h2
                 color: Theme.alertRed
             }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 15
+                Text {
+                    Layout.alignment: Qt.AlignBottom | Qt.AlignRight
+                    text: "mode"
+                    font.family: Theme.mainFont.name
+                    font.pixelSize: Theme.h5
+                    color:  Theme.orange
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 28
+                }
+                Text {
+                    Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
+                    text: "minutes"
+                    font.family: Theme.mainFont.name
+                    font.pixelSize: Theme.h5
+                    color:  Theme.orange
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 36
+                }
+            }
+
             Repeater {
                 Layout.alignment: Qt.AlignHCenter
                 model: modeModel
-                RowLayout {
-                    width: parent.width * .75
-                    height: 40
+                Item {
+                    id: repeated
+                    width: childrenRect.width
+                    height: childrenRect.height
                     Layout.alignment: Qt.AlignHCenter
-                    Text {
-                        visible: AppState.countdownTotal === seconds
-                        Layout.alignment: Qt.AlignVCenter
-                        text: ">"
-                        font.family: Theme.mainFont.name
-                        font.pixelSize: Theme.h1
-                        color:  Theme.alertRed
-                    }
-                    Text {
-                        Layout.alignment: Qt.AlignVCenter
-                        text: name
-                        font.family: Theme.mainFont.name
-                        font.pixelSize: Theme.h1
-                        color:  Theme.alertRed
-                    }
-                    Text {
-                        Layout.alignment: Qt.AlignBottom
-                        text: AppState.formatTime(seconds)
-                        font.family: Theme.mainFont.name
-                        font.pixelSize: Theme.h2
-                        color:  Theme.alertRed
-                    }
                     MouseArea {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                        width: text.width
+                        height: text.height
                         onClicked: {
                             timeChanged(seconds);
                         }
                     }
+                    Text {
+                        id: caret
+                        visible: Number(AppState.countdownTotal) == Number(seconds)
+                        text: ">"
+                        font.family: Theme.mainFont.name
+                        font.pixelSize: Theme.h2
+                        color:  Theme.alertRed
+                        x: text.x - caret.width - 5
+                        y: text.y + 11
+                    }
+                    RowLayout {
+                        id: text
+                        height: 45
+                        spacing: 15
+                        Text {
+                            text: name
+                            font.family: Theme.mainFont.name
+                            font.pixelSize: Theme.huge
+                            color:  Theme.alertRed
+                            Layout.fillWidth: true
+                        }
+                        Text {
+                            Layout.alignment: Qt.AlignBottom
+                            text: AppState.formatTime(seconds)
+                            font.family: Theme.mainFont.name
+                            font.pixelSize: Theme.h2
+                            color:  Theme.alertRed
+                            Layout.fillWidth: true
+                            Layout.bottomMargin: 3
+                        }
+                    }
                 }
             }
+
             Rectangle {
                 Layout.alignment: Qt.AlignBottom
                 height: 40

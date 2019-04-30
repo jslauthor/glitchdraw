@@ -18,6 +18,11 @@ Window {
     property real time: 0
     // An easing interpolated percentage to drive glitchiness
     property real countdownProgress: 0
+    property real shakeMax: 0
+
+    function getRndInteger(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
+    }
 
     Image {
         anchors.fill: parent
@@ -36,6 +41,7 @@ Window {
         }
         onCountdownChanged: {
             countdownProgress = Math.round(AppState.getCountProgress() * 100) / 100;
+            shakeMax = countdownProgress * 40;
         }
     }
 
@@ -211,7 +217,7 @@ Window {
                     RowLayout {
                         Layout.margins: 10
                         Layout.maximumWidth: 80
-                        spacing: 0
+                        spacing: -8
                         ColorIndicator {
                             Layout.alignment: Qt.AlignLeft
                             Layout.maximumWidth: 95
@@ -227,12 +233,31 @@ Window {
                             Header {
                                 label: "glitch countdown"
                             }
-                            Text {
+                            RowLayout {
+                                id: countdownText
                                 Layout.topMargin: 10
-                                font.family: Theme.mainFont.name
-                                font.pixelSize: 40
-                                color: Theme.superBlue
-                                text: AppState.countdownLabel
+                                spacing: -5
+                                transform: Translate {
+                                    x: countdownProgress * getRndInteger(-shakeMax, shakeMax)
+                                    y: countdownProgress * getRndInteger(-shakeMax, shakeMax)
+                                }
+
+
+                                Text {
+                                    Layout.alignment: Qt.AlignBottom
+                                    font.family: Theme.mainFont.name
+                                    font.pixelSize: 40
+                                    color: Theme.superBlue
+                                    text: AppState.countdownLabel
+                                }
+                                Text {
+                                    Layout.alignment: Qt.AlignBottom
+                                    font.family: Theme.mainFont.name
+                                    font.pixelSize: Theme.h2
+                                    color: Theme.superBlue
+                                    text: AppState.countdownMsLabel
+                                    Layout.bottomMargin: 8
+                                }
                             }
                         }
                     }

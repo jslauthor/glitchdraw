@@ -17,6 +17,7 @@
 #include <QDateTime>
 #include <QTime>
 #include <QDebug>
+#include <QElapsedTimer>
 
 #include "glitchtimer.h"
 #include "graphics/graphicsutils.h"
@@ -69,6 +70,7 @@ class AppState : public QObject
   Q_PROPERTY(QImage image READ image NOTIFY imageChanged)
   Q_PROPERTY(BrushAnatomy brush READ brush WRITE setBrush NOTIFY brushChanged)
   Q_PROPERTY(QString countdownLabel READ countdownLabel NOTIFY countdownChanged)
+  Q_PROPERTY(QString countdownMsLabel READ countdownMsLabel NOTIFY countdownChanged)
   Q_PROPERTY(int countdownTotal READ countdownTotal WRITE setCountdownTotal NOTIFY countdownTotalChanged)
 
 public:
@@ -84,7 +86,7 @@ public:
   Q_INVOKABLE void setBrushHardness(qreal hardness);
   Q_INVOKABLE void clearCanvas();
   Q_INVOKABLE qreal getCountProgress();
-  Q_INVOKABLE QString formatTime(int seconds) const;
+  Q_INVOKABLE QString formatTime(int seconds, const QString& format) const;
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();
@@ -110,6 +112,7 @@ public:
 
   QImage image() const;
   QString countdownLabel() const;
+  QString countdownMsLabel() const;
 
   void setBrush(const BrushAnatomy& brush);
   BrushAnatomy brush() const;
@@ -146,6 +149,7 @@ private:
   QImage m_image_source;
   QImage m_brush_source;
   BrushAnatomy m_brush;
+  QElapsedTimer m_elapsedTimer;
   int m_countdownTotal = 300;
   int m_countdown = m_countdownTotal;
   // Pointers

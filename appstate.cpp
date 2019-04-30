@@ -265,28 +265,39 @@ void AppState::clearCanvas() {
   m_renderThread->render(m_image);
 }
 
-QString AppState::formatTime(int seconds) const {
+QString AppState::formatTime(int seconds, const QString& format) const {
   QTime time = QTime(0,0,0,0);
-  return time.addSecs(seconds).toString("mm:ss");
+  return time.addSecs(seconds - 1).addMSecs(1000 - m_elapsedTimer.elapsed()).toString(format);
 }
 
 QString AppState::countdownLabel() const {
-  return formatTime(m_countdown);
+  return formatTime(m_countdown, "m:ss");
+}
+
+QString AppState::countdownMsLabel() const {
+  return formatTime(m_countdown, ".z");
 }
 
 qreal AppState::getCountProgress() {
-  float percent = 1. - static_cast<float>(m_countdown) / static_cast<float>(m_countdownTotal);
+  float percent =
+      1. - static_cast<float>((m_countdown - 1) * 1000 + 1000 - m_elapsedTimer.elapsed())
+      / static_cast<float>(m_countdownTotal * 1000);
   return std::max(GraphicsUtils::getGlitchAmountForCountdown(percent), 0.);
 }
 
 void AppState::restartCountdown() {
   m_countdown = m_countdownTotal;
-  m_timer->start(1000);
+  m_timer->start(16);
+  m_elapsedTimer.restart();
   emit countdownChanged();
 }
 
 void AppState::updateCountdown() {
-  m_countdown--;
+  if (m_elapsedTimer.elapsed() >= 1000) {
+    m_countdown--;
+    m_elapsedTimer.restart();
+  }
+
   if (m_countdown <= 0) {
     emit glitchImminent();
     m_timer->stop();

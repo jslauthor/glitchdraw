@@ -267,11 +267,11 @@ void AppState::clearCanvas() {
 
 QString AppState::formatTime(int seconds, const QString& format) const {
   QTime time = QTime(0,0,0,0);
-  return time.addSecs(seconds - 1).addMSecs(1000 - m_elapsedTimer.elapsed()).toString(format);
+  return time.addSecs(seconds).addMSecs(1000 - m_elapsedTimer.elapsed()).toString(format);
 }
 
 QString AppState::countdownLabel() const {
-  return formatTime(m_countdown, "m:ss");
+  return formatTime(m_countdown - 1, "m:ss");
 }
 
 QString AppState::countdownMsLabel() const {

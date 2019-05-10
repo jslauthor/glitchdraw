@@ -287,7 +287,7 @@ qreal AppState::getCountProgress() {
 
 void AppState::restartCountdown() {
   m_countdown = m_countdownTotal;
-  m_timer->start(16);
+  m_timer->start(24);
   m_elapsedTimer.restart();
   emit countdownChanged();
 }
@@ -330,4 +330,26 @@ void AppState::setCountdownTotal(int total) {
 
 int AppState::countdownTotal() const {
   return m_countdownTotal;
+}
+
+qreal AppState::getOffset(qreal base, qreal scale) {
+  return (scale * base - base) / 2.;
+}
+
+void AppState::setMiniDisplayValue(double x, double y, double width, double height, double scale) {
+  qreal rootX = getOffset(width, scale) - x;
+  qreal rootY = getOffset(height, scale) - y;
+
+  m_miniDisplayValue = MiniDisplay(
+    (width / scale) / width,
+    (height / scale) / height,
+    std::max(0., (rootX / scale) / width),
+    std::max(0., (rootY / scale) / height)
+  );
+
+  emit miniDisplayValueChanged();
+}
+
+MiniDisplay AppState::miniDisplayValue() {
+  return m_miniDisplayValue;
 }

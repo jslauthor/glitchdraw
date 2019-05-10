@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
   // See: http://doc.qt.io/qt-5/qtqml-cppintegration-definetypes.html
   // qmlRegisterType<AppState>("com.leonardsouza", 1, 0, "AppState");
   qmlRegisterType<QImageProxy>("LeonardSouza", 1, 0, "QImageProxy");
+  qmlRegisterUncreatableMetaObject(MiniDisplay::staticMetaObject, "LeonardSouza", 1, 0, "MiniDisplays", "Access to enums & flags only");
   qmlRegisterUncreatableMetaObject(Brush::staticMetaObject, "LeonardSouza", 1, 0, "Brushes", "Access to enums & flags only");
 
   QQmlApplicationEngine engine;

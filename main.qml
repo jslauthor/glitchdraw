@@ -46,7 +46,7 @@ Window {
     }
 
     Timer {
-        interval: 16
+        interval: 24
         running: true
         repeat: true
         onTriggered: {
@@ -257,6 +257,14 @@ Window {
                                     color: Theme.superBlue
                                     text: AppState.countdownMsLabel
                                     Layout.bottomMargin: 8
+                                }
+
+                                layer.enabled: true
+                                layer.effect: ShaderEffect {
+                                    property real percent: countdownProgress
+                                    property real iTime: rootWindow.time
+                                    blending: true
+                                    fragmentShader: "qrc:/shaders/shake.frag"
                                 }
                             }
                         }

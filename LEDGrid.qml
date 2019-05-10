@@ -6,16 +6,18 @@ Item {
     clip: true
 
     property real margin: 5
+    property real scale: 1
+    property real miniDisplayWidth: 0
+    property real miniDisplayHeight: 0
+    property real miniDisplayX: 0
+    property real miniDisplayY: 0
+    property int scaleMin: 1
+    property int scaleMax: 5
+
     Rectangle {
         anchors.fill: parent
         color: "black"
         opacity: .8
-    }
-
-    // This functiontakes teh difference between the scaled grid and the original
-    // and provides the offset for panning around
-    function getOffset(base) {
-        return (root.scale * base - base) / 2;
     }
 
     QImageProxy {
@@ -37,13 +39,16 @@ Item {
         PinchArea {
             pinch.target: root
             anchors.fill: parent
-            pinch.maximumScale: 5
-            pinch.minimumScale: 1
-            pinch.minimumX: -getOffset(itemRoot.width) + margin
-            pinch.maximumX: getOffset(itemRoot.width) + margin
-            pinch.minimumY: -getOffset(itemRoot.height) + margin
-            pinch.maximumY: getOffset(itemRoot.height) + margin
+            pinch.maximumScale: scaleMax
+            pinch.minimumScale: scaleMin
+            pinch.minimumX: -AppState.getOffset(itemRoot.width, root.scale) + margin
+            pinch.maximumX: AppState.getOffset(itemRoot.width, root.scale) + margin
+            pinch.minimumY: -AppState.getOffset(itemRoot.height, root.scale) + margin
+            pinch.maximumY: AppState.getOffset(itemRoot.height, root.scale) + margin
             pinch.dragAxis: Pinch.XAndYAxis
+            onPinchUpdated: function (event) {
+                AppState.setMiniDisplayValue(root.x, root.y, root.width, root.height, root.scale);
+            }
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
@@ -65,9 +70,22 @@ Item {
                 }
             }
         }
-
-
     }
 
+    Rectangle {
+        width: 200
+        height: 200
+        x: parent.width / 2
+        y: parent.height/ 2
+        border.color: "white"
+        color: "transparent"
+        Rectangle {
+            color: "white"
+            width: AppState.miniDisplayValue.widthPercent * 200
+            height: AppState.miniDisplayValue.heightPercent * 200
+            x: AppState.miniDisplayValue.xPercent * 200
+            y: AppState.miniDisplayValue.yPercent * 200
+        }
+    }
 
 }

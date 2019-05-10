@@ -23,6 +23,24 @@
 #include "graphics/graphicsutils.h"
 #include "renderthread.h"
 
+struct MiniDisplay {
+  Q_GADGET
+
+  double m_widthPercent;
+  double m_heightPercent;
+  double m_xPercent;
+  double m_yPercent;
+  Q_PROPERTY(double widthPercent MEMBER m_widthPercent)
+  Q_PROPERTY(double heightPercent MEMBER m_heightPercent)
+  Q_PROPERTY(double xPercent MEMBER m_xPercent)
+  Q_PROPERTY(double yPercent MEMBER m_yPercent)
+
+public:
+  MiniDisplay(double w = 0., double h = 0., double x = 0., double y = 0.):
+    m_widthPercent(w), m_heightPercent(h), m_xPercent(x), m_yPercent(y) {}
+};
+Q_DECLARE_METATYPE(MiniDisplay);
+
 namespace Brush {
   Q_NAMESPACE
   enum Brushes {
@@ -72,6 +90,7 @@ class AppState : public QObject
   Q_PROPERTY(QString countdownLabel READ countdownLabel NOTIFY countdownChanged)
   Q_PROPERTY(QString countdownMsLabel READ countdownMsLabel NOTIFY countdownChanged)
   Q_PROPERTY(int countdownTotal READ countdownTotal WRITE setCountdownTotal NOTIFY countdownTotalChanged)
+  Q_PROPERTY(MiniDisplay miniDisplayValue READ miniDisplayValue NOTIFY miniDisplayValueChanged)
 
 public:
   explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
@@ -122,6 +141,10 @@ public:
 
   void restartCountdown();
 
+  Q_INVOKABLE qreal getOffset(qreal base, qreal scale);
+  Q_INVOKABLE void setMiniDisplayValue(double x, double y, double width, double height, double scale);
+  MiniDisplay miniDisplayValue();
+
 signals:
   void hueChanged();
   void colorChanged();
@@ -131,6 +154,7 @@ signals:
   void countdownChanged();
   void glitchImminent();
   void countdownTotalChanged();
+  void miniDisplayValueChanged();
 
 public slots:
   void updateCountdown();
@@ -152,6 +176,7 @@ private:
   QElapsedTimer m_elapsedTimer;
   int m_countdownTotal = 300;
   int m_countdown = m_countdownTotal;
+  MiniDisplay m_miniDisplayValue;
   // Pointers
   QTimer *m_timer;
   QPoint *m_last_point;

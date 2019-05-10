@@ -87,7 +87,7 @@ vec2 Shake(float maxshake, float mag)
 void main(void)
 {
 
-    float maxshake = 0.3;				// max shake amount
+    float maxshake = 0.2;				// max shake amount
     float mag = percent;		// shake magnitude...
 
     // *temp* , We will calc shakexy once in the vertex shader...

@@ -30,5 +30,8 @@
         <file>images/webflow.svg</file>
         <file>SettingsPopup.qml</file>
         <file>shaders/shake.frag</file>
+        <file>LEDGridImage.qml</file>
+        <file>LEDGridMiniDisplay.qml</file>
+        <file>shaders/minidisplay.frag</file>
     </qresource>
 </RCC>

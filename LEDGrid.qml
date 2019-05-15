@@ -6,11 +6,6 @@ Item {
     clip: true
 
     property real margin: 5
-    property real scale: 1
-    property real miniDisplayWidth: 0
-    property real miniDisplayHeight: 0
-    property real miniDisplayX: 0
-    property real miniDisplayY: 0
     property int scaleMin: 1
     property int scaleMax: 5
 
@@ -20,22 +15,12 @@ Item {
         opacity: .8
     }
 
-    QImageProxy {
+    LEDGridImage {
         id: root
-        image: AppState.image
-        layer.enabled: true
         width: itemRoot.width - margin*2
         height: itemRoot.height - margin*2
         x: margin
         y: margin
-        layer.effect: ShaderEffect {
-            property size size: Qt.size(root.width, root.height)
-            property real frequency: 64
-            property real uScale: 5
-            property real uYrot: 0
-            blending: true
-            fragmentShader: "qrc:/shaders/led.frag"
-        }
         PinchArea {
             pinch.target: root
             anchors.fill: parent
@@ -72,20 +57,15 @@ Item {
         }
     }
 
-    Rectangle {
+    LEDGridMiniDisplay {
         width: 200
         height: 200
         x: parent.width / 2
         y: parent.height/ 2
-        border.color: "white"
-        color: "transparent"
-        Rectangle {
-            color: "white"
-            width: AppState.miniDisplayValue.widthPercent * 200
-            height: AppState.miniDisplayValue.heightPercent * 200
-            x: AppState.miniDisplayValue.xPercent * 200
-            y: AppState.miniDisplayValue.yPercent * 200
-        }
+        clip:false
+        miniDisplayWidth: AppState.miniDisplayValue.widthPercent
+        miniDisplayHeight: AppState.miniDisplayValue.heightPercent
+        miniDisplayX: AppState.miniDisplayValue.xPercent
+        miniDisplayY: AppState.miniDisplayValue.yPercent
     }
-
 }

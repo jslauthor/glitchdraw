@@ -40,7 +40,6 @@ DISTFILES += \
     images/app_bg.jpg \
     imports/Theme/qmldir \
     content/fonts/8-bit-pusab.ttf \
-    shaders/shake.frag
 
 HEADERS += \
     appstate.h \

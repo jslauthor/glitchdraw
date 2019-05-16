@@ -26,7 +26,7 @@ void main() {
   vec2 st = qt_TexCoord0; // OMG 0..1 COORDINATES SMH
 
   float cellSize = size.x / frequency;
-  vec2 coord = st / cellSize;
+  vec2 coord = st;
   vec4 tex = texture2D(source, coord);
 
   vec2 nearest = 2.0 * fract(frequency * st) - 1.0;

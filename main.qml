@@ -77,12 +77,14 @@ Window {
                 Flickable {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    contentHeight: flickableContent.height
                     flickableDirection: Flickable.VerticalFlick
                     ColumnLayout {
+                        id: flickableContent
                         Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignBottom
                         spacing: -10
                         ColumnLayout {
+                            Layout.minimumWidth: 300
                             Layout.fillWidth: true
                             Layout.margins: 10
                             spacing: 5
@@ -247,9 +249,7 @@ Window {
                                         y: countdownProgress * getRndInteger(-shakeMax, shakeMax)
                                     }
 
-
                                     Text {
-                                        Layout.alignment: Qt.AlignBottom
                                         font.family: Theme.mainFont.name
                                         font.pixelSize: 40
                                         color: Theme.superBlue
@@ -258,12 +258,11 @@ Window {
                                     Text {
                                         Layout.alignment: Qt.AlignBottom
                                         font.family: Theme.mainFont.name
-                                        font.pixelSize: Theme.h2
+                                        font.pixelSize: 12
                                         color: Theme.superBlue
                                         text: AppState.countdownMsLabel
                                         Layout.bottomMargin: 8
                                     }
-
                                     layer.enabled: true
                                 }
                             }

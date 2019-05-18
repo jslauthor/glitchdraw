@@ -108,7 +108,7 @@ Popup {
                         }
                         Text {
                             Layout.alignment: Qt.AlignBottom
-                            text: AppState.formatTime(seconds, "mm:ss")
+                            text: AppState.formatPopupLabel(seconds, "mm:ss")
                             font.family: Theme.mainFont.name
                             font.pixelSize: Theme.h2
                             color:  Theme.alertRed

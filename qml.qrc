@@ -33,5 +33,6 @@
         <file>LEDGridImage.qml</file>
         <file>LEDGridMiniDisplay.qml</file>
         <file>shaders/minidisplay.frag</file>
+        <file>images/minimize.svg</file>
     </qresource>
 </RCC>

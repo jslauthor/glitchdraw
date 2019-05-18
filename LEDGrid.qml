@@ -33,6 +33,8 @@ Item {
             pinch.dragAxis: Pinch.XAndYAxis
             onPinchUpdated: function (event) {
                 AppState.setMiniDisplayValue(root.x, root.y, root.width, root.height, root.scale);
+                miniDisplayContainer.state = "SHOWN";
+                displayTimer.restart();
             }
             MouseArea {
                 anchors.fill: parent
@@ -42,7 +44,8 @@ Item {
                   if (pressed) {
                       // Begin drawing an intermediate image on top of the saved image
                       // much like Photoshop
-                    AppState.drawFromCoordinates(mouseX, mouseY, width, height)
+                    AppState.drawFromCoordinates(mouseX, mouseY, width, height);
+                    miniDisplayContainer.state = "HIDDEN";
                   }
                 }
                 onPressedChanged: {
@@ -57,15 +60,55 @@ Item {
         }
     }
 
-    LEDGridMiniDisplay {
-        width: 200
-        height: 200
-        x: parent.width / 2
-        y: parent.height/ 2
-        clip:false
-        miniDisplayWidth: AppState.miniDisplayValue.widthPercent
-        miniDisplayHeight: AppState.miniDisplayValue.heightPercent
-        miniDisplayX: AppState.miniDisplayValue.xPercent
-        miniDisplayY: AppState.miniDisplayValue.yPercent
+    Timer {
+        id: displayTimer
+        repeat: false
+        interval: 950
+        onTriggered: miniDisplayContainer.state = "HIDDEN"
     }
+
+    Item {
+        id: miniDisplayContainer
+        width: 150
+        height: 150
+        x: parent.width - 170
+        y: parent.height - 170
+        opacity: 0
+        state: "HIDDEN"
+        transitions: [
+            Transition {
+                from: "HIDDEN"
+                to: "SHOWN"
+                NumberAnimation {
+                    target: miniDisplayContainer
+                    property: "opacity"
+                    duration: 150
+                    easing.type: Easing.InQuad
+                    from: miniDisplayContainer.opacity
+                    to: 1
+                }
+            },
+            Transition {
+                from: "SHOWN"
+                to: "HIDDEN"
+                NumberAnimation {
+                    target: miniDisplayContainer
+                    property: "opacity"
+                    duration: 250
+                    easing.type: Easing.InQuad
+                    from: miniDisplayContainer.opacity
+                    to: 0
+                }
+            }
+        ]
+        LEDGridMiniDisplay {
+            anchors.fill: parent
+            miniDisplayWidth: AppState.miniDisplayValue.widthPercent
+            miniDisplayHeight: AppState.miniDisplayValue.heightPercent
+            miniDisplayX: AppState.miniDisplayValue.xPercent
+            miniDisplayY: AppState.miniDisplayValue.yPercent
+        }
+    }
+
+
 }

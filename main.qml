@@ -40,7 +40,7 @@ Window {
             }
         }
         onCountdownChanged: {
-            countdownProgress = Math.round(AppState.getCountProgress() * 100) / 100;
+            countdownProgress = Math.round(AppState.getCountProgress() * 1000) / 1000;
             shakeMax = countdownProgress * 40;
         }
     }
@@ -74,213 +74,224 @@ Window {
             RowLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                ColumnLayout {
+                Flickable {
+                    Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignBottom
-                    spacing: -10
+                    flickableDirection: Flickable.VerticalFlick
                     ColumnLayout {
-                        Layout.margins: 10
-                        spacing: 5
-                        RowLayout {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignBottom
+                        spacing: -10
+                        ColumnLayout {
                             Layout.fillWidth: true
-                            Item {
-                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                                Layout.minimumWidth: 40
-                                Layout.minimumHeight: 40
-                                Image {
-                                    Layout.alignment: Qt.AlignVCenter
-                                    id: webflowLogo
-                                    source: "images/webflow.svg"
-                                    antialiasing: true
-                                    fillMode: Image.PreserveAspectFit
-                                    width: 40
-                                    anchors.centerIn: parent
-                                }
-                                ColorOverlay {
-                                    anchors.centerIn: parent
-                                    source: webflowLogo
-                                    color: "white"
-                                    width: webflowLogo.width
-                                    height: webflowLogo.height
-                                }
-                            }
-
-                            Text {
-                                Layout.alignment: Qt.AlignVCenter
-                                text: "glitch draw"
-                                font.family: Theme.mainFont.name
-                                font.pixelSize: Theme.h1
-                                Layout.leftMargin: 20
-                                color: "white"
-                            }
-                        }
-
-                        RowLayout {
-                            ColumnLayout {
-                                Header {
-                                    text: "brushes"
-                                }
-                                RowLayout {
-                                    Layout.fillWidth: true
-                                    BrushSelector {
-                                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                                        onItemClicked: AppState.setBrushType(brush);
-                                    }
-                                    Item {
-                                        Layout.fillWidth: true
-                                        height: 10
-                                    }
-
-                                }
-                            }
-                            Rectangle {
-                                color: "white"
-                                Layout.alignment: Qt.AlignCenter
-                                Layout.fillHeight: true
-                                width: 1
-                                Layout.rightMargin: 35
-                                Layout.topMargin: 15
-                                Layout.bottomMargin: 15
-                                opacity: .25
-                            }
-
-                            ColumnLayout {
-                                Header {
-                                    text: "settings"
-                                }
+                            Layout.margins: 10
+                            spacing: 5
+                            RowLayout {
+                                Layout.fillWidth: true
                                 Item {
-                                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                                    Layout.minimumWidth: 60
-                                    Layout.minimumHeight: 60
-                                    Rectangle {
-                                        color: "transparent"
-                                        anchors.fill: parent
-                                    }
-
+                                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                    Layout.minimumWidth: 40
+                                    Layout.minimumHeight: 40
                                     Image {
                                         Layout.alignment: Qt.AlignVCenter
-                                        id: settingsButton
-                                        source: "images/settings.svg"
+                                        id: webflowLogo
+                                        source: "images/webflow.svg"
                                         antialiasing: true
-                                        width: 60
-                                        height: 60
+                                        fillMode: Image.PreserveAspectFit
+                                        width: 40
                                         anchors.centerIn: parent
                                     }
                                     ColorOverlay {
                                         anchors.centerIn: parent
-                                        source: settingsButton
-                                        color: Theme.alertRed
-                                        width: settingsButton.width
-                                        height: settingsButton.height
-                                    }
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: settingsPopup.open()
+                                        source: webflowLogo
+                                        color: "white"
+                                        width: webflowLogo.width
+                                        height: webflowLogo.height
                                     }
                                 }
+
+                                Text {
+                                    Layout.alignment: Qt.AlignVCenter
+                                    text: "glitch draw"
+                                    font.family: Theme.mainFont.name
+                                    font.pixelSize: Theme.h1
+                                    Layout.leftMargin: 20
+                                    color: "white"
+                                }
                             }
-                        }
 
-
-
-
-                    }
-                    ConfigSlider {
-                        id: brushSizeConfig
-                        Layout.margins: 10
-                        Layout.fillWidth: true
-                        value: AppState.brush.size
-                        from: 1
-                        to: 64
-                        stepSize: 1
-                        header: "size"
-                        label: AppState.brush.size + " pts"
-                        onChanged: AppState.setBrushSize(value)
-
-                        Binding { target: brushSizeConfig; property: "value"; value: AppState.brush.size }
-                        Binding { target: AppState; property: "brush.size"; value: brushSizeConfig.value }
-                    }
-                    ConfigSlider {
-                        id: brushHardnessConfig
-                        Layout.margins: 10
-                        Layout.fillWidth: true
-                        value: AppState.brush.hardness
-                        from: 0
-                        to: 1
-                        header: "hardness"
-                        label: Math.round(AppState.brush.hardness * 100) + "%"
-                        onChanged: AppState.setBrushHardness(value)
-
-                        Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
-                        Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
-                    }
-                    RowLayout {
-                        Layout.margins: 10
-                        Layout.maximumWidth: 80
-                        spacing: -8
-                        ColorIndicator {
-                            Layout.alignment: Qt.AlignLeft
-                            Layout.maximumWidth: 95
-                            MouseArea {
-                                width:  parent.width
-                                height: parent.height
-                                onClicked: stackView.push(colorSelector)
-                            }
-                        }
-                        ColumnLayout {
-                            id: countdownContainer
-                            Layout.alignment: Qt.AlignTop
-                            Header {
-                                label: "glitch countdown"
-                            }
                             RowLayout {
-                                id: countdownText
-                                Layout.topMargin: 10
-                                spacing: -5
-                                transform: Translate {
-                                    x: countdownProgress * getRndInteger(-shakeMax, shakeMax)
-                                    y: countdownProgress * getRndInteger(-shakeMax, shakeMax)
+                                ColumnLayout {
+                                    Header {
+                                        text: "brushes"
+                                    }
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        BrushSelector {
+                                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                            onItemClicked: AppState.setBrushType(brush);
+                                        }
+                                        Item {
+                                            Layout.fillWidth: true
+                                            height: 10
+                                        }
+
+                                    }
+                                }
+                                Rectangle {
+                                    color: "white"
+                                    Layout.alignment: Qt.AlignCenter
+                                    Layout.fillHeight: true
+                                    width: 1
+                                    Layout.rightMargin: 35
+                                    Layout.topMargin: 15
+                                    Layout.bottomMargin: 15
+                                    opacity: .25
                                 }
 
+                                ColumnLayout {
+                                    Header {
+                                        text: "settings"
+                                    }
+                                    Item {
+                                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                        Layout.minimumWidth: 60
+                                        Layout.minimumHeight: 60
+                                        Rectangle {
+                                            color: "transparent"
+                                            anchors.fill: parent
+                                        }
 
-                                Text {
-                                    Layout.alignment: Qt.AlignBottom
-                                    font.family: Theme.mainFont.name
-                                    font.pixelSize: 40
-                                    color: Theme.superBlue
-                                    text: AppState.countdownLabel
+                                        Image {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            id: settingsButton
+                                            source: "images/settings.svg"
+                                            antialiasing: true
+                                            width: 60
+                                            height: 60
+                                            anchors.centerIn: parent
+                                        }
+                                        ColorOverlay {
+                                            anchors.centerIn: parent
+                                            source: settingsButton
+                                            color: Theme.alertRed
+                                            width: settingsButton.width
+                                            height: settingsButton.height
+                                        }
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: settingsPopup.open()
+                                        }
+                                    }
                                 }
-                                Text {
-                                    Layout.alignment: Qt.AlignBottom
-                                    font.family: Theme.mainFont.name
-                                    font.pixelSize: Theme.h2
-                                    color: Theme.superBlue
-                                    text: AppState.countdownMsLabel
-                                    Layout.bottomMargin: 8
-                                }
+                            }
 
-                                layer.enabled: true
-                                layer.effect: ShaderEffect {
-                                    property real percent: countdownProgress
-                                    property real iTime: rootWindow.time
-                                    blending: true
-                                    fragmentShader: "qrc:/shaders/shake.frag"
+
+
+
+                        }
+                        ConfigSlider {
+                            id: brushSizeConfig
+                            Layout.margins: 10
+                            Layout.fillWidth: true
+                            value: AppState.brush.size
+                            from: 1
+                            to: 64
+                            stepSize: 1
+                            header: "size"
+                            label: AppState.brush.size + " pts"
+                            onChanged: AppState.setBrushSize(value)
+
+                            Binding { target: brushSizeConfig; property: "value"; value: AppState.brush.size }
+                            Binding { target: AppState; property: "brush.size"; value: brushSizeConfig.value }
+                        }
+                        ConfigSlider {
+                            id: brushHardnessConfig
+                            Layout.margins: 10
+                            Layout.fillWidth: true
+                            value: AppState.brush.hardness
+                            from: 0
+                            to: 1
+                            header: "hardness"
+                            label: Math.round(AppState.brush.hardness * 100) + "%"
+                            onChanged: AppState.setBrushHardness(value)
+
+                            Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
+                            Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
+                        }
+                        RowLayout {
+                            Layout.margins: 10
+                            Layout.maximumWidth: 80
+                            spacing: -8
+                            ColorIndicator {
+                                Layout.alignment: Qt.AlignLeft
+                                Layout.maximumWidth: 95
+                                MouseArea {
+                                    width:  parent.width
+                                    height: parent.height
+                                    onClicked: stackView.push(colorSelector)
+                                }
+                            }
+                            ColumnLayout {
+                                id: countdownContainer
+                                Layout.alignment: Qt.AlignTop
+                                Header {
+                                    label: "glitch countdown"
+                                }
+                                RowLayout {
+                                    id: countdownText
+                                    Layout.topMargin: 10
+                                    spacing: -5
+                                    transform: Translate {
+                                        x: countdownProgress * getRndInteger(-shakeMax, shakeMax)
+                                        y: countdownProgress * getRndInteger(-shakeMax, shakeMax)
+                                    }
+
+
+                                    Text {
+                                        Layout.alignment: Qt.AlignBottom
+                                        font.family: Theme.mainFont.name
+                                        font.pixelSize: 40
+                                        color: Theme.superBlue
+                                        text: AppState.countdownLabel
+                                    }
+                                    Text {
+                                        Layout.alignment: Qt.AlignBottom
+                                        font.family: Theme.mainFont.name
+                                        font.pixelSize: Theme.h2
+                                        color: Theme.superBlue
+                                        text: AppState.countdownMsLabel
+                                        Layout.bottomMargin: 8
+                                    }
+
+                                    layer.enabled: true
                                 }
                             }
                         }
-                    }
 
 
-                    GlitchButton {
-                        Layout.margins: 5
-                        Layout.bottomMargin: 10
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignCenter
-                        backgroundColor: Theme.alertRed
-                        onClicked: AppState.clearCanvas()
-                        label: "CLEAR ALL"
+                        GlitchButton {
+                            Layout.margins: 5
+                            Layout.bottomMargin: 10
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignCenter
+                            backgroundColor: Theme.alertRed
+                            onClicked: AppState.clearCanvas()
+                            label: "CLEAR ALL"
+                        }
+                        GlitchButton {
+                            Layout.margins: 5
+                            Layout.bottomMargin: 10
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignCenter
+                            backgroundColor: Theme.alertRed
+                            onClicked: AppState.clearCanvas()
+                            imageSource: "images/minimize.svg"
+                        }
                     }
                 }
+
+
 
                 Item {
                     Layout.fillHeight: true

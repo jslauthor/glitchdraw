@@ -27,7 +27,6 @@ Item {
         property size rectPos: Qt.size(miniDisplayX, miniDisplayY)
         property size size: Qt.size(root.width, root.height)
 
-        blending: true
         fragmentShader: "qrc:/shaders/minidisplay.frag"
     }
 }

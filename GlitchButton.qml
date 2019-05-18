@@ -6,8 +6,11 @@ import Theme 1.0
 
 Button {
     id: root
+
     property color backgroundColor: "#888"
-    property string label: "A button"
+    property string label: ""
+    property string imageSource: "images/skull.svg"
+
     style: ButtonStyle {
         background: Rectangle {
             id: bg
@@ -23,12 +26,14 @@ Button {
         }
         label: RowLayout {
             RowLayout {
+
                 Layout.alignment: Qt.AlignCenter | Qt.AlignVCenter
                 Layout.margins: 10
                 Layout.fillWidth: true
+
                 Image {
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    source: "images/skull.svg"
+                    source: root.imageSource
                     antialiasing: true
                     Layout.rightMargin: 5
                 }

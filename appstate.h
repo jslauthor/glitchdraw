@@ -106,6 +106,7 @@ public:
   Q_INVOKABLE void clearCanvas();
   Q_INVOKABLE qreal getCountProgress();
   Q_INVOKABLE QString formatTime(int seconds, const QString& format) const;
+  Q_INVOKABLE QString formatPopupLabel(int seconds, const QString& format) const;
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();

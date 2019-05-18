@@ -8,6 +8,7 @@
 
 varying highp vec2 qt_TexCoord0;
 uniform highp sampler2D source;
+uniform highp float qt_Opacity;
 uniform float uScale; // For imperfect, isotropic anti-aliasing in
 uniform float uYrot;  // absence of dFdx() and dFdy() functions
 uniform float frequency; // Needed globally for lame version of aastep()
@@ -35,5 +36,5 @@ void main() {
   vec3 dots = tex.a > 0. ? tex.xyz : vec3(.2, .2, .2);
   float step = aastep(radius, dist);
   vec3 fragcolor = mix(dots, vec3(0.0, 0.0, 0.0), step);
-  gl_FragColor = vec4(fragcolor, step == 1.0 ? 0.0 : step);
+  gl_FragColor = vec4(fragcolor, step == 1.0 ? 0.0 : step) * qt_Opacity;
 }

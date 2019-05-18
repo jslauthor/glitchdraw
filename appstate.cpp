@@ -265,6 +265,11 @@ void AppState::clearCanvas() {
   m_renderThread->render(m_image);
 }
 
+QString AppState::formatPopupLabel(int seconds, const QString& format) const {
+  QTime time = QTime(0,0,0,0);
+  return time.addSecs(seconds).toString(format);
+}
+
 QString AppState::formatTime(int seconds, const QString& format) const {
   QTime time = QTime(0,0,0,0);
   return time.addSecs(seconds).addMSecs(1000 - m_elapsedTimer.elapsed()).toString(format);

@@ -112,6 +112,7 @@ public:
 
   // This clears the image_layer and saves the image_source to m_image
   Q_INVOKABLE void swapBuffer();
+  Q_INVOKABLE void cancelDrawing();
 
   // This creates a new brush to use for painting
   Q_INVOKABLE void updateBrush();

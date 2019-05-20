@@ -62,6 +62,13 @@ QColor AppState::colorOpaque() const {
   return newColor;
 }
 
+void AppState::cancelDrawing() {
+  m_image = QImage(m_image_source);
+  swapBuffer();
+  emit imageChanged();
+  m_renderThread->render(m_image);
+}
+
 void AppState::swapBuffer() {
   m_image_source = QImage(m_image);
   m_image_layer = QImage(m_image);

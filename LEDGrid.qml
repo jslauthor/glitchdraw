@@ -22,6 +22,7 @@ Item {
         x: margin
         y: margin
         PinchArea {
+            id: pinchArea
             pinch.target: root
             anchors.fill: parent
             pinch.maximumScale: scaleMax
@@ -36,6 +37,7 @@ Item {
                 miniDisplayContainer.state = "SHOWN";
                 displayTimer.restart();
             }
+
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
@@ -48,13 +50,15 @@ Item {
                     miniDisplayContainer.state = "HIDDEN";
                   }
                 }
-                onPressedChanged: {
-                    if (!pressed) {
-                        // This paints the intermediate image onto the saved image (makes it permanent)
-                        AppState.swapBuffer();
-                    } else {
-                        AppState.updateBrush();
-                    }
+                onCanceled: {
+                    AppState.cancelDrawing();
+                }
+                onReleased: {
+                   // This paints the intermediate image onto the saved image (makes it permanent)
+                   AppState.swapBuffer();
+                }
+                onPressed: {
+                    AppState.updateBrush();
                 }
             }
         }

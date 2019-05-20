@@ -123,6 +123,7 @@ Window {
                             }
 
                             RowLayout {
+                                Layout.fillWidth: true
                                 ColumnLayout {
                                     Header {
                                         text: "brushes"
@@ -183,6 +184,47 @@ Window {
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: settingsPopup.open()
+                                        }
+                                    }
+                                }
+
+                                Item {
+                                    visible: AppState.miniDisplayValue.scale > 1
+                                    Layout.fillHeight: true
+                                    Layout.minimumWidth: 60
+                                    ColumnLayout {
+                                        Header {
+                                            text: "zoom " + Math.round(AppState.miniDisplayValue.scale * 100) + "%"
+                                        }
+                                        Item {
+                                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                            Layout.minimumWidth: 60
+                                            Layout.minimumHeight: 60
+                                            Rectangle {
+                                                color: "transparent"
+                                                anchors.fill: parent
+                                            }
+
+                                            Image {
+                                                Layout.alignment: Qt.AlignVCenter
+                                                id: zoomButton
+                                                source: "images/minimize.svg"
+                                                antialiasing: true
+                                                width: 60
+                                                height: 60
+                                                anchors.centerIn: parent
+                                            }
+                                            ColorOverlay {
+                                                anchors.centerIn: parent
+                                                source: zoomButton
+                                                color: Theme.alertRed
+                                                width: zoomButton.width
+                                                height: zoomButton.height
+                                            }
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                onClicked: AppState.resetZoom();
+                                            }
                                         }
                                     }
                                 }
@@ -277,15 +319,6 @@ Window {
                             backgroundColor: Theme.alertRed
                             onClicked: AppState.clearCanvas()
                             label: "CLEAR ALL"
-                        }
-                        GlitchButton {
-                            Layout.margins: 5
-                            Layout.bottomMargin: 10
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignCenter
-                            backgroundColor: Theme.alertRed
-                            onClicked: AppState.clearCanvas()
-                            imageSource: "images/minimize.svg"
                         }
                     }
                 }

@@ -4,10 +4,18 @@ import LeonardSouza 1.0
 Item {
     id: itemRoot
     clip: true
+    enabled: !zoomAnimation.running
 
     property real margin: 5
     property int scaleMin: 1
-    property int scaleMax: 5
+    property int scaleMax: 10
+
+    Connections {
+        target: AppState
+        onZoomReset: {
+            zoomAnimation.restart();
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -59,10 +67,30 @@ Item {
                 }
                 onPressed: {
                     AppState.updateBrush();
+                    AppState.drawFromCoordinates(mouseX, mouseY, width, height);
                 }
             }
         }
     }
+
+    ParallelAnimation {
+        id: zoomAnimation
+        NumberAnimation {
+            target: root
+            property: "scale"
+            duration: 850
+            easing.type: Easing.InOutCirc
+            to: 1
+        }
+        NumberAnimation { target: root; property: "x"; to: margin; duration: 850; easing.type: Easing.InOutCirc }
+        NumberAnimation { target: root; property: "y"; to: margin; duration: 850; easing.type: Easing.InOutCirc }
+        onFinished: {
+            miniDisplayContainer.state = "HIDDEN";
+            AppState.setMiniDisplayValue(root.x, root.y, root.width, root.height, root.scale);
+        }
+    }
+
+
 
     Timer {
         id: displayTimer

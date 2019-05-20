@@ -117,6 +117,8 @@ public:
   // This creates a new brush to use for painting
   Q_INVOKABLE void updateBrush();
 
+  Q_INVOKABLE void resetZoom();
+
   void setColor(QColor &color);
   QColor color() const;
   QColor colorOpaque() const;
@@ -159,6 +161,7 @@ signals:
   void glitchImminent();
   void countdownTotalChanged();
   void miniDisplayValueChanged();
+  void zoomReset();
 
 public slots:
   void updateCountdown();

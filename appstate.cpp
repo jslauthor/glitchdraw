@@ -366,3 +366,7 @@ void AppState::setMiniDisplayValue(double x, double y, double width, double heig
 MiniDisplay AppState::miniDisplayValue() {
   return m_miniDisplayValue;
 }
+
+void AppState::resetZoom() {
+  emit zoomReset();
+}

@@ -349,7 +349,8 @@ void AppState::setMiniDisplayValue(double x, double y, double width, double heig
     (width / scale) / width,
     (height / scale) / height,
     std::max(0., (rootX / scale) / width),
-    std::max(0., (rootY / scale) / height)
+    std::max(0., (rootY / scale) / height),
+    scale
   );
 
   emit miniDisplayValueChanged();

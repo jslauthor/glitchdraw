@@ -296,6 +296,7 @@ Window {
                     Layout.fillHeight: true
                     Layout.minimumWidth: ledGrid.height
                     Layout.alignment: Qt.AlignRight
+                    clip: true
 
                     Connections {
                         target: AppState
@@ -349,14 +350,14 @@ Window {
                         ]
                         RadialBrush {
                             anchors.centerIn: parent
-                            width: AppState.brush.size * 7.5
-                            height: AppState.brush.size * 7.5
+                            width: (AppState.brush.size * 7.5) * AppState.miniDisplayValue.scale
+                            height: (AppState.brush.size * 7.5) * AppState.miniDisplayValue.scale
                             visible: AppState.brush.type === 0
                         }
                         SquareBrush {
                             anchors.centerIn: parent
-                            width: AppState.brush.size * 7.5
-                            height: AppState.brush.size * 7.5
+                            width: (AppState.brush.size * 7.5) * AppState.miniDisplayValue.scale
+                            height: (AppState.brush.size * 7.5) * AppState.miniDisplayValue.scale
                             visible: AppState.brush.type === 1
                         }
                     }

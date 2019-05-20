@@ -30,14 +30,16 @@ struct MiniDisplay {
   double m_heightPercent;
   double m_xPercent;
   double m_yPercent;
+  double m_scale;
   Q_PROPERTY(double widthPercent MEMBER m_widthPercent)
   Q_PROPERTY(double heightPercent MEMBER m_heightPercent)
   Q_PROPERTY(double xPercent MEMBER m_xPercent)
   Q_PROPERTY(double yPercent MEMBER m_yPercent)
+  Q_PROPERTY(double scale MEMBER m_scale)
 
 public:
-  MiniDisplay(double w = 0., double h = 0., double x = 0., double y = 0.):
-    m_widthPercent(w), m_heightPercent(h), m_xPercent(x), m_yPercent(y) {}
+  MiniDisplay(double w = 0., double h = 0., double x = 0., double y = 0., double s = 1.):
+    m_widthPercent(w), m_heightPercent(h), m_xPercent(x), m_yPercent(y), m_scale(s) {}
 };
 Q_DECLARE_METATYPE(MiniDisplay);
 

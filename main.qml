@@ -180,7 +180,9 @@ Window {
 
                                 Item {
                                     id: zoomContainer
+                                    Layout.leftMargin: 5
                                     Layout.fillHeight: true
+                                    Layout.fillWidth: true
                                     Layout.alignment: Qt.AlignTop
                                     property bool stateVisible: AppState.miniDisplayValue.scale > 1
 
@@ -202,26 +204,28 @@ Window {
                                             }
                                             PropertyChanges {
                                                 target: zoomTextAndIcon;
-                                                x: 15
+                                                x: 25
                                             }
                                         }
                                     ]
                                     transitions: [ Transition {
                                         ParallelAnimation {
-                                            NumberAnimation { property: "opacity"; duration: 500 }
+                                            NumberAnimation { property: "opacity"; duration: 250 }
                                             NumberAnimation { property: "x"; easing.type: Easing.InOutBack; duration: 250 }
                                         }
                                     }]
 
                                     ColumnLayout {
                                         id: zoomTextAndIcon
+
                                         Header {
                                             text: "zoom " + Math.round(AppState.miniDisplayValue.scale * 100) + "%"
                                         }
                                         Item {
-                                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                                             Layout.minimumWidth: 60
                                             Layout.minimumHeight: 60
+                                            scale: .65
                                             Rectangle {
                                                 color: "transparent"
                                                 anchors.fill: parent
@@ -230,7 +234,6 @@ Window {
                                             Image {
                                                 Layout.alignment: Qt.AlignVCenter
                                                 id: zoomButton
-                                                scale: .75
                                                 source: "images/minimize.svg"
                                                 antialiasing: true
                                                 width: 60

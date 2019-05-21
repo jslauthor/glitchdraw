@@ -10,7 +10,7 @@ ListView {
     orientation: ListView.Horizontal
     implicitHeight: 65
     implicitWidth: childrenRect.width
-    spacing: 20
+    spacing: 5
     signal itemClicked(int brush)
     delegate: Item {
         id: brushDelegate

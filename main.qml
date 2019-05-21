@@ -124,35 +124,25 @@ Window {
 
                             RowLayout {
                                 Layout.fillWidth: true
+                                Layout.maximumWidth: 200
                                 ColumnLayout {
+                                    Layout.fillHeight: true
+                                    Layout.alignment: Qt.AlignTop
                                     Header {
                                         text: "brushes"
                                     }
                                     RowLayout {
-                                        Layout.fillWidth: true
                                         BrushSelector {
                                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                                             onItemClicked: AppState.setBrushType(brush);
                                         }
-                                        Item {
-                                            Layout.fillWidth: true
-                                            height: 10
-                                        }
-
                                     }
-                                }
-                                Rectangle {
-                                    color: "white"
-                                    Layout.alignment: Qt.AlignCenter
-                                    Layout.fillHeight: true
-                                    width: 1
-                                    Layout.rightMargin: 35
-                                    Layout.topMargin: 15
-                                    Layout.bottomMargin: 15
-                                    opacity: .25
                                 }
 
                                 ColumnLayout {
+                                    Layout.fillHeight: true
+                                    Layout.alignment: Qt.AlignTop
+                                    Layout.leftMargin: 10
                                     Header {
                                         text: "settings"
                                     }
@@ -189,10 +179,42 @@ Window {
                                 }
 
                                 Item {
-                                    visible: AppState.miniDisplayValue.scale > 1
+                                    id: zoomContainer
                                     Layout.fillHeight: true
-                                    Layout.minimumWidth: 60
+                                    Layout.alignment: Qt.AlignTop
+                                    property bool stateVisible: AppState.miniDisplayValue.scale > 1
+
+                                    states: [
+                                        State { when: zoomContainer.stateVisible;
+                                            PropertyChanges {
+                                                target: zoomContainer;
+                                                opacity: 1.0
+                                            }
+                                            PropertyChanges {
+                                                target: zoomTextAndIcon;
+                                                x: 0
+                                            }
+                                        },
+                                        State { when: !zoomContainer.stateVisible;
+                                            PropertyChanges {
+                                                target: zoomContainer;
+                                                opacity: 0.0
+                                            }
+                                            PropertyChanges {
+                                                target: zoomTextAndIcon;
+                                                x: 15
+                                            }
+                                        }
+                                    ]
+                                    transitions: [ Transition {
+                                        ParallelAnimation {
+                                            NumberAnimation { property: "opacity"; duration: 500 }
+                                            NumberAnimation { property: "x"; easing.type: Easing.InOutBack; duration: 250 }
+                                        }
+                                    }]
+
                                     ColumnLayout {
+                                        id: zoomTextAndIcon
                                         Header {
                                             text: "zoom " + Math.round(AppState.miniDisplayValue.scale * 100) + "%"
                                         }
@@ -208,6 +230,7 @@ Window {
                                             Image {
                                                 Layout.alignment: Qt.AlignVCenter
                                                 id: zoomButton
+                                                scale: .75
                                                 source: "images/minimize.svg"
                                                 antialiasing: true
                                                 width: 60

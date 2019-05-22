@@ -139,6 +139,25 @@ Window {
                                     }
                                 }
 
+
+                                ColumnLayout {
+                                    Layout.fillHeight: true
+                                    Layout.alignment: Qt.AlignTop
+                                    Layout.leftMargin: 10
+                                    Header {
+                                        text: "erase mode"
+                                    }
+                                    GlitchButton {
+                                        Layout.margins: 5
+                                        Layout.bottomMargin: 10
+                                        Layout.fillWidth: true
+                                        Layout.alignment: Qt.AlignCenter
+                                        imageSource: "images/eraser.svg"
+                                        backgroundColor: Theme.alertRed
+                                        onClicked: AppState.setDrawMode(1)
+                                    }
+                                }
+
                                 ColumnLayout {
                                     Layout.fillHeight: true
                                     Layout.alignment: Qt.AlignTop
@@ -173,7 +192,7 @@ Window {
                                         }
                                         MouseArea {
                                             anchors.fill: parent
-                                            onClicked: settingsPopup.open()
+                                            onClicked:  settingsPopup.open()
                                         }
                                     }
                                 }

@@ -52,6 +52,15 @@ namespace Brush {
   Q_ENUMS(Brushes)
 }
 
+namespace DrawMode {
+  Q_NAMESPACE
+  enum Modes {
+    paint=0,
+    erase=1
+  };
+  Q_ENUMS(DrawModes)
+}
+
 // Data for the brush
 class BrushAnatomy: public QObject {
   Q_GADGET
@@ -93,6 +102,7 @@ class AppState : public QObject
   Q_PROPERTY(QString countdownMsLabel READ countdownMsLabel NOTIFY countdownChanged)
   Q_PROPERTY(int countdownTotal READ countdownTotal WRITE setCountdownTotal NOTIFY countdownTotalChanged)
   Q_PROPERTY(MiniDisplay miniDisplayValue READ miniDisplayValue NOTIFY miniDisplayValueChanged)
+  Q_PROPERTY(DrawMode::Modes drawMode READ drawMode WRITE setDrawMode NOTIFY drawModeChanged)
 
 public:
   explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
@@ -151,6 +161,9 @@ public:
   Q_INVOKABLE void setMiniDisplayValue(double x, double y, double width, double height, double scale);
   MiniDisplay miniDisplayValue();
 
+  Q_INVOKABLE void setDrawMode(int type);
+  DrawMode::Modes drawMode() const;
+
 signals:
   void hueChanged();
   void colorChanged();
@@ -162,6 +175,7 @@ signals:
   void countdownTotalChanged();
   void miniDisplayValueChanged();
   void zoomReset();
+  void drawModeChanged();
 
 public slots:
   void updateCountdown();
@@ -180,6 +194,7 @@ private:
   QImage m_image_source;
   QImage m_brush_source;
   BrushAnatomy m_brush;
+  DrawMode::Modes m_draw_mode = DrawMode::Modes::paint;
   QElapsedTimer m_elapsedTimer;
   int m_countdownTotal = 300;
   int m_countdown = m_countdownTotal;

@@ -121,7 +121,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
 
   // Create a new layer and paint onto it
-  // This technique is unlike to work for large images :/
+  // This technique is unlikely to work for large images :/
   QImage new_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
   new_layer.fill(Qt::transparent);
   QPainter paint;
@@ -163,6 +163,9 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   // and update m_image
   QImage original(m_image_source);
   paint.begin(&original);
+  if (m_draw_mode == DrawMode::erase) {
+    paint.setCompositionMode(QPainter::CompositionMode_DestinationOut);
+  }
   paint.drawImage(m_image_layer.rect(), m_image_layer);
   paint.end();
   m_image = original;
@@ -262,6 +265,25 @@ void AppState::setBrushType(int type) {
   }
 
   emit brushChanged();
+}
+
+void AppState::setDrawMode(int type) {
+  // totally lame that we can't use the native enum from QML
+  switch(type) {
+    case 0:
+      m_draw_mode = DrawMode::Modes::paint;
+      break;
+    case 1:
+      m_draw_mode = DrawMode::Modes::erase;
+      break;
+    default:
+      break;
+  }
+
+  emit drawModeChanged();
+}
+DrawMode::Modes AppState::drawMode() const {
+  return m_draw_mode;
 }
 
 void AppState::clearCanvas() {

@@ -490,23 +490,86 @@ Window {
                             onClicked: stackView.pop()
                         }
                     }
-                    HSBSpectrum {
+
+                    Item {
                         z: 1
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         Layout.leftMargin: 5
+                        HSBSpectrum {
+                            enabled: AppState.drawMode === 0
+                            anchors.fill: parent
+                        }
+
+                        Rectangle {
+                            visible: AppState.drawMode === 1
+                            color: "black"
+                            opacity: .4
+                            anchors.fill: parent
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: AppState.setDrawMode(0)
+                            }
+                        }
+
+                        ColumnLayout {
+                            anchors.centerIn: parent
+                            visible: AppState.drawMode === 1
+                            spacing: 15
+                            Image {
+                                Layout.alignment: Qt.AlignCenter
+                                source: "images/eraser.svg"
+                                antialiasing: true
+                                fillMode: Image.PreserveAspectFit
+                                width: 40
+                                opacity: .75
+                            }
+                            Header {
+                                Layout.alignment: Qt.AlignCenter
+                                label: "Tap to turn erase mode off."
+                            }
+                        }
+
+
                     }
+
                     AlphaGradient {
                         z: 0
                         Layout.minimumWidth: 75
                         Layout.fillHeight: true
                         Layout.leftMargin: 15
                     }
-                    HueGradient {
+
+                    Item {
                         z: 0
                         Layout.minimumWidth: 75
                         Layout.fillHeight: true
                         Layout.leftMargin: 15
+                        HueGradient {
+                            enabled: AppState.drawMode === 0
+                            anchors.fill: parent
+                        }
+
+                        Rectangle {
+                            visible: AppState.drawMode === 1
+                            color: "black"
+                            opacity: .4
+                            anchors.fill: parent
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: AppState.setDrawMode(0)
+                            }
+                        }
+
+                        Image {
+                            visible: AppState.drawMode === 1
+                            source: "images/eraser.svg"
+                            antialiasing: true
+                            fillMode: Image.PreserveAspectFit
+                            width: 40
+                            anchors.centerIn: parent
+                            opacity: .75
+                        }
                     }
                 }
             }

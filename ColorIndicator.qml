@@ -43,6 +43,16 @@ ColumnLayout {
                 property real clipSize: Theme.clipSize
                 fragmentShader: "qrc:/shaders/clipcorners.frag"
             }
+
+        Image {
+            visible: AppState.drawMode === 1
+            source: "images/eraser.svg"
+            antialiasing: true
+            fillMode: Image.PreserveAspectFit
+            width: 40
+            anchors.centerIn: parent
+            opacity: .75
+        }
     }
     RowLayout {
         spacing: 20

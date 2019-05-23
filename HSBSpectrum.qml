@@ -57,6 +57,7 @@ Rectangle {
         }
     }
     Rectangle {
+        visible: enabled
         x: (root.width * AppState.saturationF) - 15
         y: (root.height * (1 - AppState.lightnessF)) - 15
         width: 30

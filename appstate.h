@@ -187,6 +187,9 @@ private:
   qreal m_hue = 0.58;
   qreal m_saturation = 0.75;
   qreal m_lightness = 0.75;
+  qreal m_last_hue = 0.58;
+  qreal m_last_saturation = 0.75;
+  qreal m_last_lightness = 0.75;
   qreal m_opacity = 0.5;
   QColor m_color;
   QImage m_image;

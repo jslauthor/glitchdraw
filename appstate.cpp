@@ -48,6 +48,7 @@ void AppState::setColor(QColor &color) {
   if (color != m_color) {
     m_color = color;
     emit colorChanged();
+    emit hueChanged();
   }
 }
 
@@ -268,13 +269,27 @@ void AppState::setBrushType(int type) {
 }
 
 void AppState::setDrawMode(int type) {
+  QColor newColor = QColor();
   // totally lame that we can't use the native enum from QML
   switch(type) {
     case 0:
       m_draw_mode = DrawMode::Modes::paint;
+      m_hue = m_last_hue;
+      m_saturation = m_last_saturation;
+      m_lightness = m_last_lightness;
+      newColor.setHsvF(m_last_hue, m_last_saturation, m_last_lightness, m_opacity);
+      setColor(newColor);
       break;
     case 1:
       m_draw_mode = DrawMode::Modes::erase;
+      m_last_hue = m_hue;
+      m_last_saturation = m_saturation;
+      m_last_lightness = m_lightness;
+      m_hue = 0.;
+      m_saturation = 0.;
+      m_lightness = 0.;
+      newColor.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
+      setColor(newColor);
       break;
     default:
       break;

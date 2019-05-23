@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
+import LeonardSouza 1.0
 import Theme 1.0
 
 Button {
@@ -10,10 +11,14 @@ Button {
     property color backgroundColor: "#888"
     property string label: ""
     property string imageSource: "images/skull.svg"
+    property bool flashBackground: false
+    property bool toggleEnabled: false
+    property bool toggled: true
 
     style: ButtonStyle {
         background: Rectangle {
             id: bg
+            state: "ON"
             anchors.fill: parent
             color: backgroundColor
             layer.enabled: true
@@ -23,6 +28,38 @@ Button {
                     property real clipSize: Theme.clipSize
                     fragmentShader: "qrc:/shaders/clipcorners.frag"
                 }
+
+            states: [
+                State {
+                    name: "ON"
+                    when: toggled
+                    PropertyChanges { target: bg; opacity: 1.;  color: backgroundColor}
+                },
+                State {
+                    name: "OFF"
+                    when: !toggled
+                    PropertyChanges { target: bg; opacity: 0.; color: Qt.lighter(backgroundColor, 1.5)}
+                }
+            ]
+
+            transitions: [
+                Transition {
+                    from: "ON"
+                    to: "OFF"
+                    ParallelAnimation {
+                        ColorAnimation { target: bg; duration: 100 }
+                        PropertyAnimation { target: bg; properties: "opacity"; duration: 100 }
+                    }
+                },
+                Transition {
+                    from: "OFF"
+                    to: "ON"
+                    ParallelAnimation {
+                        ColorAnimation { target: bg; duration: 100 }
+                        PropertyAnimation { target: bg; properties: "opacity"; duration: 100 }
+                    }
+                }
+            ]
         }
         label: RowLayout {
             RowLayout {
@@ -32,10 +69,9 @@ Button {
                 Layout.fillWidth: true
 
                 Image {
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     source: root.imageSource
                     antialiasing: true
-                    Layout.rightMargin: 5
                 }
 
                 Text {
@@ -44,11 +80,15 @@ Button {
                     color: "#FFFFFF"
                     font.family: Theme.mainFont.name
                     font.pixelSize: Theme.h2
-                    Layout.leftMargin: 0
+                    Layout.leftMargin: 5
                     Layout.topMargin: 1
+                    visible: root.label.length != 0
                 }
             }
 
         }
     }
+
+
+
 }

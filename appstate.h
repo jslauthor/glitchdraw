@@ -58,7 +58,7 @@ namespace DrawMode {
     paint=0,
     erase=1
   };
-  Q_ENUMS(DrawModes)
+  Q_ENUMS(Modes)
 }
 
 // Data for the brush

@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<QImageProxy>("LeonardSouza", 1, 0, "QImageProxy");
   qmlRegisterUncreatableMetaObject(MiniDisplay::staticMetaObject, "LeonardSouza", 1, 0, "MiniDisplays", "Access to enums & flags only");
   qmlRegisterUncreatableMetaObject(Brush::staticMetaObject, "LeonardSouza", 1, 0, "Brushes", "Access to enums & flags only");
+  qmlRegisterUncreatableMetaObject(DrawMode::staticMetaObject, "LeonardSouza", 1, 0, "Modes", "Access to enums & flags only");
 
   QQmlApplicationEngine engine;
   // See: http://doc.qt.io/qt-5/qtqml-cppintegration-contextproperties.html

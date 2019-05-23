@@ -141,20 +141,23 @@ Window {
 
 
                                 ColumnLayout {
+                                    Layout.minimumWidth: 75
                                     Layout.fillHeight: true
                                     Layout.alignment: Qt.AlignTop
                                     Layout.leftMargin: 10
                                     Header {
-                                        text: "erase mode"
+                                        text: "erase: " + String(AppState.drawMode === 0 ? "off" : "on")
                                     }
                                     GlitchButton {
-                                        Layout.margins: 5
-                                        Layout.bottomMargin: 10
-                                        Layout.fillWidth: true
+                                        Layout.minimumWidth: 65
+                                        Layout.minimumHeight: 65
                                         Layout.alignment: Qt.AlignCenter
                                         imageSource: "images/eraser.svg"
-                                        backgroundColor: Theme.alertRed
-                                        onClicked: AppState.setDrawMode(1)
+                                        backgroundColor: Theme.mutedBlue
+                                        toggleEnabled: true
+                                        toggled: AppState.drawMode === 1
+                                        flashBackground: true
+                                        onClicked: AppState.drawMode === 0 ? AppState.setDrawMode(1) : AppState.setDrawMode(0)
                                     }
                                 }
 

@@ -369,6 +369,23 @@ Window {
                         id: ledGrid
                         anchors.fill: parent
                     }
+
+                    Text {
+                        visible: countdownProgress >= .01
+                        text: "Draw on me before time runs out!"
+                        anchors.centerIn: parent
+                        font.family: Theme.mainFont.name
+                        font.pixelSize: Theme.h5
+                        color: "#FFFFFF"
+                        SequentialAnimation on opacity {
+                            running: true
+                            loops: Animation.Infinite
+                            NumberAnimation { to: 1; easing.type: Easing.InOutCubic; duration: 400; }
+                            NumberAnimation { to: 0; easing.type: Easing.InOutCubic; duration: 400; }
+                            NumberAnimation { to: 1; easing.type: Easing.InOutCubic; duration: 400; }
+                        }
+                    }
+
                     Item {
                         id: brushContainer
                         anchors.centerIn: parent

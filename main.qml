@@ -294,8 +294,10 @@ Window {
 
                             Item {
                                 id: zoomContainer
-                                property real targetWidth: 90
-                                Layout.leftMargin: 5
+                                property real targetWidth: 130
+                                Layout.topMargin: 5
+                                Layout.rightMargin: 5
+                                Layout.bottomMargin: 10
                                 Layout.fillHeight: true
                                 Layout.minimumWidth: targetWidth
                                 Layout.alignment: Qt.AlignTop
@@ -330,43 +332,10 @@ Window {
                                     }
                                 }]
 
-                                ColumnLayout {
-                                    id: zoomTextAndIcon
-
-                                    Header {
-                                        text: "zoom " + Math.round(AppState.miniDisplayValue.scale * 100) + "%"
-                                    }
-                                    Item {
-                                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                                        Layout.minimumWidth: 60
-                                        Layout.minimumHeight: 60
-                                        scale: .65
-                                        Rectangle {
-                                            color: "transparent"
-                                            anchors.fill: parent
-                                        }
-
-                                        Image {
-                                            Layout.alignment: Qt.AlignVCenter
-                                            id: zoomButton
-                                            source: "images/minimize.svg"
-                                            antialiasing: true
-                                            width: 60
-                                            height: 60
-                                            anchors.centerIn: parent
-                                        }
-                                        ColorOverlay {
-                                            anchors.centerIn: parent
-                                            source: zoomButton
-                                            color: Theme.alertRed
-                                            width: zoomButton.width
-                                            height: zoomButton.height
-                                        }
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            onClicked: AppState.resetZoom();
-                                        }
-                                    }
+                                ZoomButton {
+                                    anchors.fill: parent
+                                    backgroundColor: Theme.alertRed
+                                    onClicked: AppState.resetZoom();
                                 }
                             }
                         }

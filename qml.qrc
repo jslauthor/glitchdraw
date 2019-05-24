@@ -33,7 +33,9 @@
         <file>LEDGridImage.qml</file>
         <file>LEDGridMiniDisplay.qml</file>
         <file>shaders/minidisplay.frag</file>
-        <file>images/minimize.svg</file>
         <file>images/eraser.svg</file>
+        <file>ZoomButton.qml</file>
+        <file>images/minimize_down_left.svg</file>
+        <file>images/minimize_up_right.svg</file>
     </qresource>
 </RCC>

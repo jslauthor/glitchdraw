@@ -33,7 +33,7 @@ Button {
                 State {
                     name: "ON"
                     when: toggled
-                    PropertyChanges { target: bg; opacity: 1.;  color: backgroundColor}
+                    PropertyChanges { target: bg; opacity: 1.; color: backgroundColor}
                 },
                 State {
                     name: "OFF"
@@ -60,6 +60,31 @@ Button {
                     }
                 }
             ]
+
+
+            Connections {
+                target: root
+                onClicked: pressAnimation.running = true
+            }
+
+            SequentialAnimation  {
+                id: pressAnimation
+                loops: 1
+                ColorAnimation {
+                    target: bg
+                    property: "color"
+                    from: backgroundColor
+                    to: Qt.lighter(backgroundColor, 1.5)
+                    duration: 75
+                }
+                ColorAnimation {
+                    target: bg
+                    property: "color"
+                    to: backgroundColor
+                    from: Qt.lighter(backgroundColor, 1.5)
+                    duration: 75
+                }
+            }
         }
         label: RowLayout {
             RowLayout {

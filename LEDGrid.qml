@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import LeonardSouza 1.0
+import Theme 1.0
 
 Item {
     id: itemRoot
@@ -71,6 +72,16 @@ Item {
                 }
             }
         }
+    }
+
+    Text {
+        visible: AppState.miniDisplayValue.scale > 1
+        text: "zoom: " + String(Math.round(AppState.miniDisplayValue.scale * 100)) + "%"
+        font.family: Theme.mainFont.name
+        font.pixelSize: Theme.h5
+        color: "#FFFFFF"
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 15
     }
 
     ParallelAnimation {

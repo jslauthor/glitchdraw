@@ -110,20 +110,21 @@ Button {
 
                 ColumnLayout {
                     Layout.fillWidth: true
+                    spacing: -5
                     Text {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                        text: "zoom"
+                        text: "reset"
                         color: "#FFFFFF"
                         font.family: Theme.mainFont.name
-                        font.pixelSize: Theme.h6
+                        font.pixelSize: Theme.h5
                     }
                     Text {
                         Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         Layout.minimumWidth: 60
-                        text: Math.round(AppState.miniDisplayValue.scale * 100) + "%"
+                        text: "zoom"
                         color: "#FFFFFF"
                         font.family: Theme.mainFont.name
-                        font.pixelSize: Theme.h5
+                        font.pixelSize: Theme.h2
                     }
                 }
             }

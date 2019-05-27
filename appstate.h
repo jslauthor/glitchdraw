@@ -103,6 +103,7 @@ class AppState : public QObject
   Q_PROPERTY(int countdownTotal READ countdownTotal WRITE setCountdownTotal NOTIFY countdownTotalChanged)
   Q_PROPERTY(MiniDisplay miniDisplayValue READ miniDisplayValue NOTIFY miniDisplayValueChanged)
   Q_PROPERTY(DrawMode::Modes drawMode READ drawMode WRITE setDrawMode NOTIFY drawModeChanged)
+  Q_PROPERTY(bool isGlitching READ isGlitching NOTIFY isGlitchingChanged)
 
 public:
   explicit AppState(QObject *parent = nullptr, RenderThread *thread = nullptr);
@@ -164,6 +165,8 @@ public:
   Q_INVOKABLE void setDrawMode(int type);
   DrawMode::Modes drawMode() const;
 
+  bool isGlitching() const;
+
 signals:
   void hueChanged();
   void colorChanged();
@@ -172,6 +175,7 @@ signals:
   void brushChanged();
   void countdownChanged();
   void glitchImminent();
+  void isGlitchingChanged();
   void countdownTotalChanged();
   void miniDisplayValueChanged();
   void zoomReset();
@@ -202,6 +206,7 @@ private:
   int m_countdownTotal = 300;
   int m_countdown = m_countdownTotal;
   MiniDisplay m_miniDisplayValue;
+  bool m_isGlitching = false;
   // Pointers
   QTimer *m_timer;
   QPoint *m_last_point;

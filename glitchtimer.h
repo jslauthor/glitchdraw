@@ -35,7 +35,7 @@ private:
   GlitchPainter m_painter;
   QImage m_image;
   QImage m_temp_image;
-  qreal m_duration = 500;
+  qreal m_duration = 1500;
   QTime m_time;
   int m_timerId = -1;
   QEasingCurve m_easing = QEasingCurve(QEasingCurve::OutInElastic);

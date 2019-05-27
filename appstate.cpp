@@ -355,13 +355,21 @@ void AppState::updateCountdown() {
   emit countdownChanged();
 }
 
-void AppState::onGlitchStarted() {
+bool AppState::isGlitching() const {
+  return m_isGlitching;
+}
 
+void AppState::onGlitchStarted() {
+  m_isGlitching = true;
+  emit isGlitchingChanged();
 }
 
 void AppState::onGlitchCompleted() {
   swapBuffer();
   restartCountdown();
+
+  m_isGlitching = false;
+  emit isGlitchingChanged();
 }
 
 void AppState::onImageChanged(QImage image) {

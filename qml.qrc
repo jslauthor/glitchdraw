@@ -38,5 +38,6 @@
         <file>images/minimize_down_left.svg</file>
         <file>images/minimize_up_right.svg</file>
         <file>images/hand_cursor.svg</file>
+        <file>shaders/crt.frag</file>
     </qresource>
 </RCC>

@@ -286,6 +286,9 @@ Window {
                           }
 
                           RowLayout {
+                              Layout.fillWidth: true
+                              Layout.maximumWidth: parent.width
+                              clip: false
                               GlitchButton {
                                   Layout.margins: 5
                                   Layout.bottomMargin: 10

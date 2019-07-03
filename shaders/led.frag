@@ -12,23 +12,15 @@ uniform highp float qt_Opacity;
 uniform float uScale; // For imperfect, isotropic anti-aliasing in
 uniform float uYrot;  // absence of dFdx() and dFdy() functions
 uniform float frequency; // Needed globally for lame version of aastep()
-uniform vec2 size;
 
 float aastep(float threshold, float value) {
-#ifdef GL_OES_standard_derivatives
-  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
-#else
-  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
-#endif
+  float afwidth = frequency * .005 / uScale / cos(uYrot);
   return smoothstep(threshold - afwidth, threshold + afwidth, value);
 }
 
 void main() {
   vec2 st = qt_TexCoord0; // OMG 0..1 COORDINATES SMH
-
-  float cellSize = size.x / frequency;
-  vec2 coord = st;
-  vec4 tex = texture2D(source, coord);
+  vec4 tex = texture2D(source, st);
 
   vec2 nearest = 2.0 * fract(frequency * st) - 1.0;
   float dist = length(nearest);

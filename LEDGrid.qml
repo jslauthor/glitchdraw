@@ -8,8 +8,11 @@ Item {
     enabled: !zoomAnimation.running
 
     property real margin: 5
+    property real yMargin: margin + (itemRoot.height / 2 - gridHeight / 2)
     property int scaleMin: 1
     property int scaleMax: 10
+
+    property real gridHeight: itemRoot.width * .666667
 
     Connections {
         target: AppState
@@ -27,9 +30,9 @@ Item {
     LEDGridImage {
         id: root
         width: itemRoot.width - margin*2
-        height: itemRoot.height - margin*2
+        height: gridHeight - margin*2 * .677777
         x: margin
-        y: margin
+        y: yMargin
         PinchArea {
             id: pinchArea
             pinch.target: root
@@ -38,8 +41,8 @@ Item {
             pinch.minimumScale: scaleMin
             pinch.minimumX: -AppState.getOffset(itemRoot.width, root.scale) + margin
             pinch.maximumX: AppState.getOffset(itemRoot.width, root.scale) + margin
-            pinch.minimumY: -AppState.getOffset(itemRoot.height, root.scale) + margin
-            pinch.maximumY: AppState.getOffset(itemRoot.height, root.scale) + margin
+            pinch.minimumY: -AppState.getOffset(gridHeight, root.scale) + yMargin;
+            pinch.maximumY: AppState.getOffset(gridHeight, root.scale)
             pinch.dragAxis: Pinch.XAndYAxis
             onPinchUpdated: function (event) {
                 AppState.setMiniDisplayValue(root.x, root.y, root.width, root.height, root.scale);
@@ -94,7 +97,7 @@ Item {
             to: 1
         }
         NumberAnimation { target: root; property: "x"; to: margin; duration: 850; easing.type: Easing.InOutCirc }
-        NumberAnimation { target: root; property: "y"; to: margin; duration: 850; easing.type: Easing.InOutCirc }
+        NumberAnimation { target: root; property: "y"; to: yMargin; duration: 850; easing.type: Easing.InOutCirc }
         onFinished: {
             miniDisplayContainer.state = "HIDDEN";
             AppState.setMiniDisplayValue(root.x, root.y, root.width, root.height, root.scale);
@@ -112,9 +115,9 @@ Item {
 
     Item {
         id: miniDisplayContainer
-        width: 150
+        width: 150 * 1.66667
         height: 150
-        x: parent.width - 170
+        x: parent.width - 270
         y: parent.height - 170
         opacity: 0
         state: "HIDDEN"

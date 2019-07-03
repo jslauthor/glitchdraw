@@ -7,7 +7,7 @@ RenderThread::RenderThread(QObject *parent) : QThread(parent)
   this->m_image = QImage();
   rgb_matrix::RGBMatrix::Options defaults;
   defaults.hardware_mapping = "regular";  // or e.g. "adafruit-hat"
-  defaults.chain_length = 2;
+  defaults.chain_length = 3;
   defaults.parallel = 2;
   defaults.brightness = 65;
   //    defaults.show_refresh_rate = true;
@@ -46,9 +46,9 @@ void RenderThread::run()
   forever {
     lock.lockForRead();
     QImage image = m_image;
-    for (int y = 0; y < LED_SIZE; y++) {
+    for (int y = 0; y < LED_HEIGHT; y++) {
       const QRgb *s = reinterpret_cast<const QRgb*>(image.constScanLine(y));
-      const QRgb *end = s + LED_SIZE;
+      const QRgb *end = s + LED_WIDTH;
       int x = 0;
       while (s < end) {
         m_canvas->SetPixel(x, y, qRed(*s), qGreen(*s), qBlue(*s));
@@ -57,8 +57,5 @@ void RenderThread::run()
       }
     }
     lock.unlock();
-
-    //        m_canvas->Fill(100, 100, 100);
-//    m_mutex.unlock();
   }
 }

@@ -6,7 +6,7 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   m_color = QColor();
   m_color.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
 
-  m_image = QImage(LED_SIZE, LED_SIZE, QImage::Format_ARGB32_Premultiplied);
+  m_image = QImage(LED_WIDTH, LED_HEIGHT, QImage::Format_ARGB32_Premultiplied);
   m_image.fill(Qt::transparent);
   m_last_point = nullptr;
 
@@ -114,8 +114,8 @@ void AppState::updateBrush() {
 
 void AppState::drawFromCoordinates(double x, double y, double width, double height) {
   QPoint point(
-    qRound(qBound(0., x / width, 1.) * LED_SIZE),
-    qRound(qBound(0., y / height, 1.) * LED_SIZE)
+    qRound(qBound(0., x / width, 1.) * LED_WIDTH),
+    qRound(qBound(0., y / height, 1.) * LED_HEIGHT)
   );
 
   //TODO: Make color selector circle bobble big on drag like Procreate

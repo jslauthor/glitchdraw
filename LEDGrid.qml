@@ -41,8 +41,8 @@ Item {
             pinch.minimumScale: scaleMin
             pinch.minimumX: -AppState.getOffset(itemRoot.width, root.scale) + margin
             pinch.maximumX: AppState.getOffset(itemRoot.width, root.scale) + margin
-            pinch.minimumY: -AppState.getOffset(gridHeight, root.scale) + yMargin;
-            pinch.maximumY: AppState.getOffset(gridHeight, root.scale)
+            pinch.minimumY: -AppState.getOffset(gridHeight, root.scale) + yMargin
+            pinch.maximumY: AppState.getOffset(gridHeight, root.scale) + yMargin
             pinch.dragAxis: Pinch.XAndYAxis
             onPinchUpdated: function (event) {
                 AppState.setMiniDisplayValue(root.x, root.y, root.width, root.height, root.scale);

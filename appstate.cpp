@@ -75,6 +75,7 @@ void AppState::swapBuffer() {
   m_image_layer = QImage(m_image);
   m_image_layer.fill(QColor(0, 0, 0, 0));
   m_last_point = nullptr;
+  m_touchPointFlags.fill(false);
 
 // Useful for saving an image
 //  QImageWriter writer("/images/layer.png", "PNG");
@@ -113,10 +114,19 @@ void AppState::updateBrush() {
 }
 
 void AppState::drawFromCoordinates(double x, double y, double width, double height) {
+
   QPoint point(
     qRound(qBound(0., x / width, 1.) * LED_WIDTH),
     qRound(qBound(0., y / height, 1.) * LED_HEIGHT)
   );
+
+  int flagIndex = (point.x() + point.y()) + (point.y() * LED_WIDTH);
+  if (m_touchPointFlags.at(flagIndex)) {
+    // since our layer does not the same coordinate twice, skip drawing.
+    return;
+  }
+
+  m_touchPointFlags.at(flagIndex) = true;
 
   //TODO: Make color selector circle bobble big on drag like Procreate
   //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
@@ -414,4 +424,48 @@ MiniDisplay AppState::miniDisplayValue() {
 
 void AppState::resetZoom() {
   emit zoomReset();
+}
+
+bool AppState::eventFilter(QObject *obj, QEvent *event)
+{
+
+  if (event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchEnd) {
+    auto *touchEvent = dynamic_cast<QTouchEvent *>(event);
+    if (touchEvent->device()->name() == ledTouchscreenId) {
+      const auto& point = touchEvent->touchPoints().at(0);
+      switch (event->type()) {
+        case QEvent::TouchBegin:
+          updateBrush();
+//          const auto& point = touchEvent->touchPoints().at(0);
+//          for (const auto& point : touchEvent->touchPoints()) {
+            drawFromCoordinates(point.pos().x(), point.pos().y(), touchEvent->window()->width(), touchEvent->window()->height());
+    //          qDebug("Touch device %f %f %f", point.pos().x(), point.pos().y(), point.ellipseDiameters());
+//          }
+          break;
+        case QEvent::TouchUpdate: {
+          auto newTime = std::chrono::high_resolution_clock::now();
+          std::chrono::duration<double> elapsed = newTime - lastDurationForEventFilter;
+          qInfo("%f", elapsed.count());
+          // throttle function
+    //        qDebug("Max %d", touchEvent->window()->width());
+//        const auto& point = touchEvent->touchPoints().at(0);
+//          for (const auto& point : touchEvent->touchPoints()) {
+          if (elapsed.count() >= 0.06) {
+            lastDurationForEventFilter = newTime;
+                      qInfo("triggered");
+            drawFromCoordinates(point.pos().x(), point.pos().y(), touchEvent->window()->width(), touchEvent->window()->height());
+          }
+    //          qDebug("Touch device %f %f %f", point.pos().x(), point.pos().y(), point.ellipseDiameters());
+//          }
+          break;
+        }
+        case QEvent::TouchEnd:
+          swapBuffer();
+          break;
+      }
+      return true; // do not propagate event
+    }
+  }
+
+  return QObject::eventFilter(obj, event);
 }

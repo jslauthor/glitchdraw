@@ -18,6 +18,8 @@
 #include <QTime>
 #include <QDebug>
 #include <QElapsedTimer>
+#include <array>
+#include <chrono>
 
 #include "glitchtimer.h"
 #include "graphics/graphicsutils.h"
@@ -187,7 +189,14 @@ public slots:
   void onGlitchCompleted();
   void onImageChanged(QImage);
 
+protected:
+  bool eventFilter(QObject *obj, QEvent *event) override;
+
 private:
+  const QString ledTouchscreenId = QString("Multi touch   Multi touch overlay device");
+  std::array<bool, LED_WIDTH * LED_HEIGHT> m_touchPointFlags;
+  std::chrono::high_resolution_clock::time_point lastDurationForEventFilter = std::chrono::high_resolution_clock::now();
+
   qreal m_hue = 0.58;
   qreal m_saturation = 0.75;
   qreal m_lightness = 0.75;

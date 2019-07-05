@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
   // Remove cursor
   QCursor cursor(Qt::BlankCursor);
   QGuiApplication::setOverrideCursor(cursor);
+  app.installEventFilter(&appState);
 
   // Below is if you want to instantiate the object _in_ QML.
   // See: http://doc.qt.io/qt-5/qtqml-cppintegration-definetypes.html

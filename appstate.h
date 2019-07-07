@@ -25,6 +25,7 @@
 #include <array>
 #include <chrono>
 #include <QTouchEvent>
+#include <QList>
 
 #include "glitchtimer.h"
 #include "graphics/graphicsutils.h"

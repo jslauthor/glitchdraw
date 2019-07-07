@@ -419,10 +419,15 @@ bool AppState::eventFilter(QObject *obj, QEvent *event)
     auto *touchEvent = dynamic_cast<QTouchEvent *>(event);
 
     if (touchEvent->device()->name() == ledTouchscreenId) {
+      auto points = QList<QTouchEvent::TouchPoint>();
+      // Take the first five touch points
+      for (int i = 0; i <= std::min(touchEvent->touchPoints().count()-1, 4); i++) {
+        points.append(touchEvent->touchPoints().at(i));
+      }
       switch (event->type()) {
         case QEvent::TouchBegin: {
           updateBrush();
-          for (const auto& point : touchEvent->touchPoints()) {
+          for (const auto& point : points) {
             drawPoint(point, touchEvent->window()->width(), touchEvent->window()->height());
           }
           break;
@@ -432,7 +437,7 @@ bool AppState::eventFilter(QObject *obj, QEvent *event)
           std::chrono::duration<double> elapsed = newTime - lastDurationForEventFilter;
           // throttle the input since it comes in at 450hz and kills the pi
           if (elapsed.count() >= 0.02) {
-            for (const auto& point : touchEvent->touchPoints()) {
+            for (const auto& point : points) {
               lastDurationForEventFilter = newTime;
               drawPoint(point, touchEvent->window()->width(), touchEvent->window()->height());
             }

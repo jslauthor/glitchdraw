@@ -9,8 +9,11 @@ RenderThread::RenderThread(QObject *parent) : QThread(parent)
   defaults.hardware_mapping = "regular";  // or e.g. "adafruit-hat"
   defaults.chain_length = 3;
   defaults.parallel = 2;
-  defaults.brightness = 65;
-  //    defaults.show_refresh_rate = true;
+  defaults.brightness = 75;
+//  defaults.show_refresh_rate = true;
+  defaults.pwm_bits = 10;
+  defaults.pwm_dither_bits = 1;
+  defaults.pwm_lsb_nanoseconds = 200;
   rgb_matrix::RuntimeOptions runtime;
   runtime.drop_privileges = -1; // Need this otherwise the touchscreen doesn't work
   runtime.gpio_slowdown = 2;

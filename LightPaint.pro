@@ -20,7 +20,8 @@ SOURCES += \
     graphics/graphicsutils.cpp \
     renderthread.cpp \
     glitchtimer.cpp \
-    glitchpainter.cpp
+    glitchpainter.cpp \
+    math/mathutils.cpp
 
 RESOURCES += qml.qrc \
     imports/Theme/Theme.qml \
@@ -48,7 +49,8 @@ HEADERS += \
     graphics/graphicsutils.h \
     renderthread.h \
     glitchtimer.h \
-    glitchpainter.h
+    glitchpainter.h \
+    math/mathutils.h
 
 unix:!macx: LIBS += -L$$PWD/rpi-rgb-led-matrix/lib/ -lrgbmatrix
 

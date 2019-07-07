@@ -8,7 +8,6 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
 
   m_image = QImage(LED_WIDTH, LED_HEIGHT, QImage::Format_ARGB32_Premultiplied);
   m_image.fill(Qt::transparent);
-  m_last_point = nullptr;
 
   m_glitch_timer = new GlitchTimer(this);
   connect(m_glitch_timer, &GlitchTimer::glitchStarted, this, &AppState::onGlitchStarted);
@@ -23,6 +22,7 @@ AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   swapBuffer();
 
   m_renderThread->render(m_image);
+  updateBrush();
 }
 
 AppState::~AppState() {
@@ -74,7 +74,6 @@ void AppState::swapBuffer() {
   m_image_source = QImage(m_image);
   m_image_layer = QImage(m_image);
   m_image_layer.fill(QColor(0, 0, 0, 0));
-  m_last_point = nullptr;
   m_touchPointFlags.fill(false);
 
 // Useful for saving an image
@@ -115,14 +114,15 @@ void AppState::updateBrush() {
 
 void AppState::drawFromCoordinates(double x, double y, double width, double height) {
 
+  restartCountdown();
   QPoint point(
     qRound(qBound(0., x / width, 1.) * LED_WIDTH),
     qRound(qBound(0., y / height, 1.) * LED_HEIGHT)
   );
 
-  int flagIndex = (point.x() + point.y()) + (point.y() * LED_WIDTH);
+  int flagIndex = qBound(0, (point.x() + point.y()) + (point.y() * LED_WIDTH), LED_TOTAL_POINTS - 1);
   if (m_touchPointFlags.at(flagIndex)) {
-    // since our layer does not the same coordinate twice, skip drawing.
+    // since our layer does draw not the same coordinate twice, skip drawing.
     return;
   }
 
@@ -130,6 +130,7 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
 
   //TODO: Make color selector circle bobble big on drag like Procreate
   //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
+  // TODO: Remove decay in glitch shader?
 
   // Create a new layer and paint onto it
   // This technique is unlikely to work for large images :/
@@ -139,33 +140,8 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   paint.begin(&new_layer);
   int half_brush_size = m_brush.size/2;
 
-  if (m_last_point == nullptr) {
-    paint.drawImage(point.x()-half_brush_size, point.y()-half_brush_size, m_brush_source);
-  } else {
-    QLineF line(m_last_point->x(), m_last_point->y(), point.x(), point.y());
-    qreal length = line.length();
-    qreal increment = length/100;
-    QImage temp_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
-    temp_layer.fill(Qt::transparent);
-    for (qreal x = 0.0001; x <= length; x += increment) {
-      QImage line_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
-      line_layer.fill(Qt::transparent);
-      QPainter linePainter;
-      linePainter.begin(&line_layer);
-      QPointF targetPoint(line.pointAt(x / length));
-      linePainter.drawImage(
-        static_cast<int>(targetPoint.x())-half_brush_size,
-        static_cast<int>(targetPoint.y())-half_brush_size,
-        m_brush_source);
-      linePainter.end();
-      temp_layer = GraphicsUtils::mergeImages(temp_layer, line_layer, m_color.alpha());
-    }
-    paint.drawImage(new_layer.rect(), temp_layer);
-  }
+  paint.drawImage(point.x()-half_brush_size, point.y()-half_brush_size, m_brush_source);
   paint.end();
-
-  delete m_last_point;
-  m_last_point = new QPoint(point.x(), point.y());
 
   // Merge the new layer and do not allow it to go above alpha threhold (acts like photoshop)
   m_image_layer = GraphicsUtils::mergeImages(m_image_layer, new_layer, m_color.alpha());
@@ -182,8 +158,6 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
   m_image = original;
 
   emit imageChanged();
-
-  restartCountdown();
   m_renderThread->render(m_image);
 }
 
@@ -194,6 +168,7 @@ void AppState::setColorFromCoordinates(double x, double y, double width, double 
   QColor newColor = QColor();
   newColor.setHsvF(hue(), m_saturation, m_lightness, m_opacity);
   setColor(newColor);
+  updateBrush();
 }
 
 void AppState::setHueFromCoordinates(double y, double height) {
@@ -203,6 +178,7 @@ void AppState::setHueFromCoordinates(double y, double height) {
   newColor.setHsvF(hue, m_saturation, m_lightness, m_opacity);
   setColor(newColor);
   setHue(hue);
+  updateBrush();
 }
 
 void AppState::setOpacityFromCoordinates(double y, double height) {
@@ -210,6 +186,7 @@ void AppState::setOpacityFromCoordinates(double y, double height) {
   QColor newColor = QColor();
   newColor.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
   setColor(newColor);
+  updateBrush();
 }
 
 void AppState::setSaturationF(qreal saturation) {
@@ -426,37 +403,40 @@ void AppState::resetZoom() {
   emit zoomReset();
 }
 
+void AppState::drawPoint(const QTouchEvent::TouchPoint &point, int width, int height)
+{
+  // What's up with all these magic numbers? 20 and -12 are the amount of offset
+  // required to scale the bezel to the LED screens based on their differing aspect ratios
+  const auto x = MathUtils::scaleRange(point.pos().x(), 20., width - 20, 0., width);
+  const auto y = MathUtils::scaleRange(point.pos().y(), -12., height + 12., 12., height - 12.);
+  drawFromCoordinates(x, y, width, height);
+}
+
 bool AppState::eventFilter(QObject *obj, QEvent *event)
 {
 
   if (event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchEnd) {
     auto *touchEvent = dynamic_cast<QTouchEvent *>(event);
+
     if (touchEvent->device()->name() == ledTouchscreenId) {
-      const auto& point = touchEvent->touchPoints().at(0);
       switch (event->type()) {
-        case QEvent::TouchBegin:
+        case QEvent::TouchBegin: {
           updateBrush();
-//          const auto& point = touchEvent->touchPoints().at(0);
-//          for (const auto& point : touchEvent->touchPoints()) {
-            drawFromCoordinates(point.pos().x(), point.pos().y(), touchEvent->window()->width(), touchEvent->window()->height());
-    //          qDebug("Touch device %f %f %f", point.pos().x(), point.pos().y(), point.ellipseDiameters());
-//          }
+          for (const auto& point : touchEvent->touchPoints()) {
+            drawPoint(point, touchEvent->window()->width(), touchEvent->window()->height());
+          }
           break;
+        }
         case QEvent::TouchUpdate: {
           auto newTime = std::chrono::high_resolution_clock::now();
           std::chrono::duration<double> elapsed = newTime - lastDurationForEventFilter;
-          qInfo("%f", elapsed.count());
-          // throttle function
-    //        qDebug("Max %d", touchEvent->window()->width());
-//        const auto& point = touchEvent->touchPoints().at(0);
-//          for (const auto& point : touchEvent->touchPoints()) {
-          if (elapsed.count() >= 0.06) {
-            lastDurationForEventFilter = newTime;
-                      qInfo("triggered");
-            drawFromCoordinates(point.pos().x(), point.pos().y(), touchEvent->window()->width(), touchEvent->window()->height());
+          // throttle the input since it comes in at 450hz and kills the pi
+          if (elapsed.count() >= 0.02) {
+            for (const auto& point : touchEvent->touchPoints()) {
+              lastDurationForEventFilter = newTime;
+              drawPoint(point, touchEvent->window()->width(), touchEvent->window()->height());
+            }
           }
-    //          qDebug("Touch device %f %f %f", point.pos().x(), point.pos().y(), point.ellipseDiameters());
-//          }
           break;
         }
         case QEvent::TouchEnd:

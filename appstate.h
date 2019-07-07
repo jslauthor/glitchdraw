@@ -1,6 +1,10 @@
 #ifndef APPSTATE_H
 #define APPSTATE_H
 
+#define LED_HEIGHT_SCALE_FACTOR 0.9488627100244351
+#define LED_WIDTH_SCALE_FACTOR 1.053893244444444
+#define LED_TOTAL_POINTS LED_WIDTH * LED_HEIGHT
+
 #include <QObject>
 #include <QColor>
 #include <QVector3D>
@@ -20,9 +24,11 @@
 #include <QElapsedTimer>
 #include <array>
 #include <chrono>
+#include <QTouchEvent>
 
 #include "glitchtimer.h"
 #include "graphics/graphicsutils.h"
+#include "math/mathutils.h"
 #include "renderthread.h"
 
 struct MiniDisplay {
@@ -84,8 +90,8 @@ public:
   }
   ~BrushAnatomy() override = default;
   Brush::Brushes type = Brush::Brushes::circle;
-  qreal hardness = .5;
-  int size = 10;
+  qreal hardness = 1.;
+  int size = 2;
 };
 Q_DECLARE_METATYPE(BrushAnatomy);
 
@@ -169,6 +175,8 @@ public:
 
   bool isGlitching() const;
 
+  void drawPoint(const QTouchEvent::TouchPoint& point, int width, int height);
+
 signals:
   void hueChanged();
   void colorChanged();
@@ -203,7 +211,7 @@ private:
   qreal m_last_hue = 0.58;
   qreal m_last_saturation = 0.75;
   qreal m_last_lightness = 0.75;
-  qreal m_opacity = 0.5;
+  qreal m_opacity = 1.;
   QColor m_color;
   QImage m_image;
   QImage m_image_layer;
@@ -218,7 +226,6 @@ private:
   bool m_isGlitching = false;
   // Pointers
   QTimer *m_timer;
-  QPoint *m_last_point;
   RenderThread *m_renderThread;
   GlitchTimer *m_glitch_timer;
 };

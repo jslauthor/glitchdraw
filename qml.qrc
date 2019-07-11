@@ -39,5 +39,7 @@
         <file>images/minimize_up_right.svg</file>
         <file>images/hand_cursor.svg</file>
         <file>shaders/crt.frag</file>
+        <file>GlitchWarning.qml</file>
+        <file>LEDPanelGraphic.qml</file>
     </qresource>
 </RCC>

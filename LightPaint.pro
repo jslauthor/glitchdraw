@@ -41,7 +41,7 @@ DISTFILES += \
     images/back.svg \
     images/app_bg.jpg \
     imports/Theme/qmldir \
-    content/fonts/8-bit-pusab.ttf \
+    content/fonts/8-bit-pusab.ttf
 
 HEADERS += \
     appstate.h \

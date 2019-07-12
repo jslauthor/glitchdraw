@@ -220,17 +220,20 @@ Window {
                   Binding { target: brushHardnessConfig; property: "value"; value: AppState.brush.hardness }
                   Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
               }
+
+              ColorIndicator {
+                  Layout.margins: 10
+                  Layout.fillWidth: true
+                  Layout.alignment: Qt.AlignLeft
+                  Layout.maximumWidth: 95
+              }
+
               RowLayout {
                   Layout.margins: 10
-                  Layout.maximumWidth: 80
-                  spacing: -8
-                  ColorIndicator {
-                      Layout.alignment: Qt.AlignLeft
-                      Layout.maximumWidth: 95
-                  }
                   ColumnLayout {
                       id: countdownContainer
                       Layout.alignment: Qt.AlignTop
+                      Layout.maximumWidth: 200
                       Header {
                           label: "glitch countdown"
                       }
@@ -260,22 +263,27 @@ Window {
                           layer.enabled: true
                       }
                   }
+                  ColumnLayout {
+                      Layout.alignment: Qt.AlignTop
+                      Header {
+                          label: "clear panel"
+                      }
+                      RowLayout {
+                          GlitchButton {
+                              Layout.margins: 5
+                              Layout.bottomMargin: 10
+                              Layout.fillWidth: true
+                              Layout.fillHeight: true
+                              Layout.alignment: Qt.AlignCenter
+                              backgroundColor: Theme.alertRed
+                              onClicked: AppState.clearCanvas()
+                          }
+                      }
+                  }
+
               }
 
-              RowLayout {
-                  Layout.fillWidth: true
-                  Layout.maximumWidth: parent.width
-                  clip: false
-                  GlitchButton {
-                      Layout.margins: 5
-                      Layout.bottomMargin: 10
-                      Layout.fillWidth: true
-                      Layout.alignment: Qt.AlignCenter
-                      backgroundColor: Theme.alertRed
-                      onClicked: AppState.clearCanvas()
-                      label: "CLEAR"
-                  }
-              }
+
           }
 
 

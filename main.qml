@@ -221,11 +221,96 @@ Window {
                   Binding { target: AppState; property: "brush.hardness"; value: brushHardnessConfig.value }
               }
 
-              ColorIndicator {
+              RowLayout {
                   Layout.margins: 10
                   Layout.fillWidth: true
-                  Layout.alignment: Qt.AlignLeft
-                  Layout.maximumWidth: 95
+                  Layout.maximumWidth: 300
+                  Item {
+                      id: brushSizePreviewContainer
+                      property bool stateVisible: false
+                      Layout.fillHeight: true
+                      Layout.minimumWidth: 300
+                      Layout.rightMargin: 0
+                      states: [
+                          State { when: brushSizePreviewContainer.stateVisible;
+                              PropertyChanges {
+                                  target: brushSizePreviewContainer;
+                                  opacity: 1.0
+                              }
+                              PropertyChanges {
+                                  target: brushSizePreviewContainer;
+                                  Layout.minimumWidth: 300
+                              }
+                              PropertyChanges {
+                                  target: brushSizePreviewContainer;
+                                  Layout.rightMargin: 20
+                              }
+                          },
+                          State { when: !brushSizePreviewContainer.stateVisible;
+                              PropertyChanges {
+                                  target: brushSizePreviewContainer;
+                                  opacity: 0.0
+                              }
+                              PropertyChanges {
+                                  target: brushSizePreviewContainer;
+                                  Layout.minimumWidth: 0
+                              }
+                              PropertyChanges {
+                                  target: brushSizePreviewContainer;
+                                  Layout.rightMargin: 0
+                              }
+                          }
+                      ]
+                      transitions: [ Transition {
+                          ParallelAnimation {
+                              NumberAnimation { property: "opacity"; duration: 250 }
+                              NumberAnimation { property: "Layout.minimumWidth"; easing.type: Easing.InOutBack; duration: 250 }
+                              NumberAnimation { property: "Layout.rightMargin"; easing.type: Easing.InOutBack; duration: 250 }
+                          }
+                      }]
+
+                      Item {
+                          id: brushSizePreview
+                          width: 200
+                          height: 100
+                          anchors.centerIn: parent
+                          Connections {
+                              target: AppState
+                              onBrushChanged: {
+                                  brushSizePreviewContainer.stateVisible = true
+                                  brushTimer.restart()
+                              }
+                          }
+
+                          Timer {
+                              id: brushTimer
+                              repeat: false
+                              interval: 2000
+                              onTriggered: brushSizePreviewContainer.stateVisible = false
+                          }
+
+                          LEDPanelGraphic {
+                             anchors.centerIn: parent
+                             anchors.fill: parent
+                          }
+                          RadialBrush {
+                              selectedColor: AppState.colorOpaque
+                              anchors.centerIn: parent
+                              width: AppState.brush.size * 1.45
+                              height: AppState.brush.size * 1.45
+                              visible: AppState.brush.type === 0
+                          }
+                          SquareBrush {
+                              color: AppState.colorOpaque
+                              anchors.centerIn: parent
+                              width: AppState.brush.size * 1.45
+                              height: AppState.brush.size * 1.45
+                              visible: AppState.brush.type === 1
+                          }
+                      }
+                  }
+
+                  ColorIndicator {}
               }
 
               RowLayout {

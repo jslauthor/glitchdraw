@@ -13,7 +13,7 @@ RenderThread::RenderThread(QObject *parent) : QThread(parent)
 //  defaults.show_refresh_rate = true;
   rgb_matrix::RuntimeOptions runtime;
   runtime.drop_privileges = -1; // Need this otherwise the touchscreen doesn't work
-  runtime.gpio_slowdown = 2;
+  runtime.gpio_slowdown = 4;
   m_canvas = rgb_matrix::CreateMatrixFromOptions(defaults, runtime);
   if (m_canvas == nullptr) {
     qInfo("could not create matrix");

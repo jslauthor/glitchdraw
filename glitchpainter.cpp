@@ -2,7 +2,7 @@
 
 GlitchPainter::GlitchPainter(QObject *parent) : QObject(parent)
 {
-    format.setVersion(2, 1);
+    format.setVersion(3, 0);
     surface.setFormat(format);
     surface.create();
 

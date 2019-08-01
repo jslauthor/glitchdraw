@@ -99,14 +99,6 @@ uniform float percent;
 highp float time;
 highp vec2 coord;
 
-float round(float n) {
-    return floor(n + .5);
-}
-
-vec2 round(vec2 n) {
-    return floor(n + .5);
-}
-
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }

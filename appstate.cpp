@@ -433,14 +433,8 @@ bool AppState::eventFilter(QObject *obj, QEvent *event)
           break;
         }
         case QEvent::TouchUpdate: {
-          auto newTime = std::chrono::high_resolution_clock::now();
-          std::chrono::duration<double> elapsed = newTime - lastDurationForEventFilter;
-          // throttle the input since it comes in at 450hz and kills the pi
-          if (elapsed.count() >= 0.02) {
-            for (const auto& point : points) {
-              lastDurationForEventFilter = newTime;
-              drawPoint(point, touchEvent->window()->width(), touchEvent->window()->height());
-            }
+          for (const auto& point : points) {
+            drawPoint(point, touchEvent->window()->width(), touchEvent->window()->height());
           }
           break;
         }

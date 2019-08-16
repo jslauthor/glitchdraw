@@ -54,6 +54,7 @@ Window {
 
     // This Item creates the CRT effect
     Item {
+      id: mainView
       anchors.fill: parent
       enabled: !AppState.isGlitching
       Image {
@@ -467,11 +468,37 @@ Window {
       }
 
       GlitchWarning {
+          id: glitchWarning
+          property bool showWarning: true
           width: (parent.height * 1.7777) * .5
           height: (parent.width * .5625) * .5
-          opacity: countdownProgress >= .01 && !AppState.isGlitching ? 1 : 0
+          opacity: countdownProgress >= .01 && !AppState.isGlitching && glitchWarning.showWarning ? 1 : 0
           anchors.centerIn: parent
       }
+
+      // Connections / Timer will hide the GlitchWarning if the user interacts with the screen,
+      // then display it after 500ms
+
+      function hideGlitchWarning() {
+          glitchWarning.showWarning = false;
+          warningTimer.restart();
+      }
+
+      Connections {
+          target: AppState
+          onColorChanged: mainView.hideGlitchWarning()
+          onBrushChanged: mainView.hideGlitchWarning()
+          onDrawModeChanged: mainView.hideGlitchWarning()
+      }
+
+      Timer {
+          id: warningTimer
+          repeat: false
+          interval: 500
+          onTriggered: glitchWarning.showWarning = true
+      }
+
+      // Global sweet sweet glitchy shader action right there
 
       layer.enabled: true
       layer.effect: ShaderEffect {
@@ -482,7 +509,4 @@ Window {
           fragmentShader: "qrc:/shaders/crt.frag"
       }
     }
-
-
-
 }

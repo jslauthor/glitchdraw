@@ -204,7 +204,6 @@ protected:
 private:
   const QString ledTouchscreenId = QString("Multi touch   Multi touch overlay device");
   std::array<bool, LED_WIDTH * LED_HEIGHT> m_touchPointFlags;
-  std::chrono::high_resolution_clock::time_point lastDurationForEventFilter = std::chrono::high_resolution_clock::now();
 
   qreal m_hue = 0.58;
   qreal m_saturation = 0.75;

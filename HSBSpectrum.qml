@@ -49,6 +49,12 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
+            onPressed: {
+                selectedColor.state = "moving"
+            }
+            onReleased: {
+                selectedColor.state = "static"
+            }
             onPositionChanged: {
                 if (pressed) {
                     AppState.setColorFromCoordinates(mouseX, mouseY, width, height)
@@ -57,6 +63,7 @@ Rectangle {
         }
     }
     Rectangle {
+        id: selectedColor
         visible: enabled
         x: (root.width * AppState.saturationF) - 15
         y: (root.height * (1 - AppState.lightnessF)) - 15
@@ -66,5 +73,21 @@ Rectangle {
         border.color: "white"
         border.width: 3
         radius: 15
+        states: [
+            State {
+                name: "moving"
+                PropertyChanges { target: selectedColor; scale: 2; }
+            },
+            State {
+                name: "static"
+                PropertyChanges { target: selectedColor; scale: 1; }
+            }
+        ]
+        transitions: [
+            Transition {
+                NumberAnimation { property: "scale"; easing.type: Easing.InOutBack; duration: 250 }
+            }
+
+        ]
     }
 }

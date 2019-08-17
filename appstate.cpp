@@ -128,10 +128,6 @@ void AppState::drawFromCoordinates(double x, double y, double width, double heig
 
   m_touchPointFlags.at(flagIndex) = true;
 
-  //TODO: Make color selector circle bobble big on drag like Procreate
-  //TODO: Add cool circle thingie to HSBSpectrum (https://www.shadertoy.com/view/ltBXRc)
-  // TODO: Remove decay in glitch shader?
-
   // Create a new layer and paint onto it
   // This technique is unlikely to work for large images :/
   QImage new_layer(m_image_layer.size(), QImage::Format_ARGB32_Premultiplied);
@@ -401,6 +397,12 @@ MiniDisplay AppState::miniDisplayValue() {
 
 void AppState::resetZoom() {
   emit zoomReset();
+}
+
+QColor AppState::getInvertedLightness(const QColor &color) {
+  auto invertedLightness = static_cast<int>((1.0 - color.lightnessF()) * 255.);
+  auto invertedColor = QColor(invertedLightness, invertedLightness, invertedLightness, 255);
+  return invertedColor;
 }
 
 void AppState::drawPoint(const QTouchEvent::TouchPoint &point, int width, int height)

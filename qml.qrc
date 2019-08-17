@@ -41,5 +41,6 @@
         <file>shaders/crt.frag</file>
         <file>GlitchWarning.qml</file>
         <file>LEDPanelGraphic.qml</file>
+        <file>shaders/glowing_circle.frag</file>
     </qresource>
 </RCC>

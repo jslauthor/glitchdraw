@@ -70,7 +70,7 @@ Rectangle {
         width: 30
         height: 30
         color: AppState.color
-        border.color: "white"
+        border.color: AppState.getInvertedLightness(AppState.color)
         border.width: 3
         radius: 15
         states: [

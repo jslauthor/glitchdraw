@@ -2,6 +2,8 @@
 
 #include "appstate.h"
 
+#define BEZEL_SCALE 17.5
+
 AppState::AppState(QObject *parent, RenderThread *thread) : QObject(parent) {
   m_color = QColor();
   m_color.setHsvF(m_hue, m_saturation, m_lightness, m_opacity);
@@ -407,10 +409,10 @@ QColor AppState::getInvertedLightness(const QColor &color) {
 
 void AppState::drawPoint(const QTouchEvent::TouchPoint &point, int width, int height)
 {
-  // What's up with all these magic numbers? 20 and -12 are the amount of offset
+  // What's up with all these magic numbers? 17.5 is the amount of offset
   // required to scale the bezel to the LED screens based on their differing aspect ratios
-  const auto x = MathUtils::scaleRange(point.pos().x(), 20., width - 20, 0., width);
-  const auto y = MathUtils::scaleRange(point.pos().y(), -12., height + 12., 12., height - 12.);
+  const auto x = MathUtils::scaleRange(point.pos().x(), BEZEL_SCALE, width - BEZEL_SCALE, 0., width);
+  const auto y = MathUtils::scaleRange(point.pos().y(), -BEZEL_SCALE, height + BEZEL_SCALE, BEZEL_SCALE, height - BEZEL_SCALE);
   drawFromCoordinates(x, y, width, height);
 }
 

@@ -51,6 +51,7 @@ Rectangle {
             hoverEnabled: true
             onPressed: {
                 selectedColor.state = "moving"
+                AppState.setColorFromCoordinates(mouseX, mouseY, width, height)
             }
             onReleased: {
                 selectedColor.state = "static"

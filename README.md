@@ -1,6 +1,6 @@
 # Welcome to Glitch Draw
 
-This is a fun little side project I worked on for [Webflow](www.webflow.com)'s office. It's a series of six touch-sensitive LED panels connected to a Raspberry Pi. The Pi drives a small LCD panel with Photoshop-like functionality, enabling you to create all manner of interesting drawings with your finger. Think of it as a finger-painting lite brite™!  There's a catch, though. If you stop working on your drawing, a countdown start in that will eventually _glitch_ your image and will continue to do so until your image is gone forever. It's a fight against entropy, folks, so keep drawing!
+This is a fun little side project I worked on for [Webflow](www.webflow.com)'s office. It's a series of six touch-sensitive LED panels connected to a Raspberry Pi. The Pi drives a small LCD panel with Photoshop-like functionality, enabling you to create all manner of interesting drawings with your fingers. Think of it as a finger-painting lite brite™!  There's a catch, though. If you stop working on your drawing, a countdown begins that will tell Glitch Draw to _glitch_ your image and will continue to do so until your image is gone forever. It's a fight against entropy, folks, so keep drawing!
 
 ![Here's the lovely Stacy using it!](https://dl.dropboxusercontent.com/s/dy2n2b3r6oxnjqt/glitchdraw_usage.gif)
 

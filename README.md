@@ -12,7 +12,7 @@ This is a fun little side project I worked on for [Webflow](www.webflow.com)'s o
 
 ##### Watch a video of it in action
 
-[![Watch the video](https://dl.dropboxusercontent.com/s/5c5mpog47o13obg/glitchdraw_video_preview.png?dl=1)](https://youtu.be/vt5fpE0bzSY)
+[![Watch the video](https://dl.dropboxusercontent.com/s/5c5mpog47o13obg/glitchdraw_video_preview.png?dl=1)](https://vimeo.com/363608705)
 
 ##### Qt + Smart LED Matrix + Raspberry Pi + IR Touch Bezel = FUN
 
